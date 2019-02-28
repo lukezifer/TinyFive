@@ -6,7 +6,8 @@ SYNDIR := syn
 
 TOP := cpu
 EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=02
-STOPTIME := 100ns
+## Variable STOPTIME: set --stop-time, e.g. 100ns
+STOPTIME ?= 100ns
 
 Q := 
 
@@ -25,8 +26,8 @@ tb_analysis_target := $(addprefix tb_analysis., $(tb_entities))
 tb_eleborate_target := $(addprefix tb_eleborate., $(tb_entities))
 tb_eleborate_top_target := $(addprefix tb_eleborate., $(tb_top_entity))
 
-.PHONY: all sim clean analysis eleborate run
-
+.PHONY: all sim clean analysis eleborate run tb_analysis tb_eleborate
+## all: run TOP testbench
 all: analysis tb_analysis tb_eleborate run
 
 analysis: $(analysis_target) $(analysis_top_target)
@@ -66,3 +67,6 @@ sim: run
 
 clean:
 	$(RM) -r $(SYNDIR)/*
+
+help: Makefile
+	@sed -n 's/^##//p' $<
