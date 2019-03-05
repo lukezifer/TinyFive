@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
+[*] Tue Mar  5 18:54:35 2019
+[*]
+[dumpfile] "/mnt/Data/workspace/Mips_CPU/syn/tb_reg.vcd"
+[dumpfile_mtime] "Tue Mar  5 18:52:29 2019"
+[dumpfile_size] 1627
+[savefile] "/mnt/Data/workspace/Mips_CPU/test/tb_reg.gtkw"
+[timestart] 0
+[size] 1066 934
+[pos] -1 -1
+*-24.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 231
+[signals_width] 158
+[sst_expanded] 1
+[sst_vpaned_height] 259
+@28
+tb_reg.tb_clk
+tb_reg.tb_rst
+tb_reg.tb_w_enable
+@22
+tb_reg.tb_w_addr[4:0]
+tb_reg.tb_w_data[31:0]
+tb_reg.tb_r_addr1[4:0]
+tb_reg.tb_r_data1[31:0]
+tb_reg.tb_r_addr2[4:0]
+tb_reg.tb_r_data2[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
