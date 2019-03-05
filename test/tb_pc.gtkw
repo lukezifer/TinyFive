@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
+[*] Tue Mar  5 18:57:57 2019
+[*]
+[dumpfile] "/mnt/Data/workspace/Mips_CPU/syn/tb_pc.vcd"
+[dumpfile_mtime] "Tue Mar  5 18:56:16 2019"
+[dumpfile_size] 2272
+[savefile] "/mnt/Data/workspace/Mips_CPU/test/tb_pc.gtkw"
+[timestart] 0
+[size] 1066 934
+[pos] -1 -1
+*-24.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_pc.
+[sst_width] 231
+[signals_width] 190
+[sst_expanded] 1
+[sst_vpaned_height] 244
+@28
+tb_pc.dut.clk
+tb_pc.dut.rst
+tb_pc.dut.en
+@29
+tb_pc.dut.ld
+@22
+tb_pc.dut.internal_count[31:0]
+tb_pc.dut.cnt[31:0]
+tb_pc.dut.data_in[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
