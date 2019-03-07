@@ -45,7 +45,7 @@ tb_eleborate: $(tb_eleborate_top_target)
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
 
 run_%: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
-	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$* --disp-time --stop-time=$(STOPTIME) --vcd=$(SYNDIR)/tb_$*.vcd
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$* --disp-time --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
 
 tb_eleborate.%: $(TESTDIR)/%.vhd
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) $*
