@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
+[*] Thu Mar  7 15:44:47 2019
+[*]
+[dumpfile] "/mnt/Data/workspace/Mips_CPU/syn/tb_ram.ghw"
+[dumpfile_mtime] "Thu Mar  7 15:41:04 2019"
+[dumpfile_size] 25541
+[savefile] "/mnt/Data/workspace/Mips_CPU/test/tb_ram.gtkw"
+[timestart] 0
+[size] 1080 1894
+[pos] -1 -1
+*-24.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.tb_ram.
+[treeopen] top.tb_ram.dut.
+[treeopen] top.tb_ram.dut.ram_set.
+[sst_width] 231
+[signals_width] 158
+[sst_expanded] 1
+[sst_vpaned_height] 593
+@28
+top.tb_ram.dut.clk
+@22
+#{top.tb_ram.dut.addr[7:0]} top.tb_ram.dut.addr[7] top.tb_ram.dut.addr[6] top.tb_ram.dut.addr[5] top.tb_ram.dut.addr[4] top.tb_ram.dut.addr[3] top.tb_ram.dut.addr[2] top.tb_ram.dut.addr[1] top.tb_ram.dut.addr[0]
+@28
+top.tb_ram.dut.w_en
+top.tb_ram.dut.r_en
+@22
+#{top.tb_ram.dut.din[31:0]} top.tb_ram.dut.din[31] top.tb_ram.dut.din[30] top.tb_ram.dut.din[29] top.tb_ram.dut.din[28] top.tb_ram.dut.din[27] top.tb_ram.dut.din[26] top.tb_ram.dut.din[25] top.tb_ram.dut.din[24] top.tb_ram.dut.din[23] top.tb_ram.dut.din[22] top.tb_ram.dut.din[21] top.tb_ram.dut.din[20] top.tb_ram.dut.din[19] top.tb_ram.dut.din[18] top.tb_ram.dut.din[17] top.tb_ram.dut.din[16] top.tb_ram.dut.din[15] top.tb_ram.dut.din[14] top.tb_ram.dut.din[13] top.tb_ram.dut.din[12] top.tb_ram.dut.din[11] top.tb_ram.dut.din[10] top.tb_ram.dut.din[9] top.tb_ram.dut.din[8] top.tb_ram.dut.din[7] top.tb_ram.dut.din[6] top.tb_ram.dut.din[5] top.tb_ram.dut.din[4] top.tb_ram.dut.din[3] top.tb_ram.dut.din[2] top.tb_ram.dut.din[1] top.tb_ram.dut.din[0]
+#{top.tb_ram.dut.dout[31:0]} top.tb_ram.dut.dout[31] top.tb_ram.dut.dout[30] top.tb_ram.dut.dout[29] top.tb_ram.dut.dout[28] top.tb_ram.dut.dout[27] top.tb_ram.dut.dout[26] top.tb_ram.dut.dout[25] top.tb_ram.dut.dout[24] top.tb_ram.dut.dout[23] top.tb_ram.dut.dout[22] top.tb_ram.dut.dout[21] top.tb_ram.dut.dout[20] top.tb_ram.dut.dout[19] top.tb_ram.dut.dout[18] top.tb_ram.dut.dout[17] top.tb_ram.dut.dout[16] top.tb_ram.dut.dout[15] top.tb_ram.dut.dout[14] top.tb_ram.dut.dout[13] top.tb_ram.dut.dout[12] top.tb_ram.dut.dout[11] top.tb_ram.dut.dout[10] top.tb_ram.dut.dout[9] top.tb_ram.dut.dout[8] top.tb_ram.dut.dout[7] top.tb_ram.dut.dout[6] top.tb_ram.dut.dout[5] top.tb_ram.dut.dout[4] top.tb_ram.dut.dout[3] top.tb_ram.dut.dout[2] top.tb_ram.dut.dout[1] top.tb_ram.dut.dout[0]
+#{top.tb_ram.dut.ram_set[0][31:0]} top.tb_ram.dut.ram_set[0][31] top.tb_ram.dut.ram_set[0][30] top.tb_ram.dut.ram_set[0][29] top.tb_ram.dut.ram_set[0][28] top.tb_ram.dut.ram_set[0][27] top.tb_ram.dut.ram_set[0][26] top.tb_ram.dut.ram_set[0][25] top.tb_ram.dut.ram_set[0][24] top.tb_ram.dut.ram_set[0][23] top.tb_ram.dut.ram_set[0][22] top.tb_ram.dut.ram_set[0][21] top.tb_ram.dut.ram_set[0][20] top.tb_ram.dut.ram_set[0][19] top.tb_ram.dut.ram_set[0][18] top.tb_ram.dut.ram_set[0][17] top.tb_ram.dut.ram_set[0][16] top.tb_ram.dut.ram_set[0][15] top.tb_ram.dut.ram_set[0][14] top.tb_ram.dut.ram_set[0][13] top.tb_ram.dut.ram_set[0][12] top.tb_ram.dut.ram_set[0][11] top.tb_ram.dut.ram_set[0][10] top.tb_ram.dut.ram_set[0][9] top.tb_ram.dut.ram_set[0][8] top.tb_ram.dut.ram_set[0][7] top.tb_ram.dut.ram_set[0][6] top.tb_ram.dut.ram_set[0][5] top.tb_ram.dut.ram_set[0][4] top.tb_ram.dut.ram_set[0][3] top.tb_ram.dut.ram_set[0][2] top.tb_ram.dut.ram_set[0][1] top.tb_ram.dut.ram_set[0][0]
+@23
+#{top.tb_ram.dut.ram_set[1][31:0]} top.tb_ram.dut.ram_set[1][31] top.tb_ram.dut.ram_set[1][30] top.tb_ram.dut.ram_set[1][29] top.tb_ram.dut.ram_set[1][28] top.tb_ram.dut.ram_set[1][27] top.tb_ram.dut.ram_set[1][26] top.tb_ram.dut.ram_set[1][25] top.tb_ram.dut.ram_set[1][24] top.tb_ram.dut.ram_set[1][23] top.tb_ram.dut.ram_set[1][22] top.tb_ram.dut.ram_set[1][21] top.tb_ram.dut.ram_set[1][20] top.tb_ram.dut.ram_set[1][19] top.tb_ram.dut.ram_set[1][18] top.tb_ram.dut.ram_set[1][17] top.tb_ram.dut.ram_set[1][16] top.tb_ram.dut.ram_set[1][15] top.tb_ram.dut.ram_set[1][14] top.tb_ram.dut.ram_set[1][13] top.tb_ram.dut.ram_set[1][12] top.tb_ram.dut.ram_set[1][11] top.tb_ram.dut.ram_set[1][10] top.tb_ram.dut.ram_set[1][9] top.tb_ram.dut.ram_set[1][8] top.tb_ram.dut.ram_set[1][7] top.tb_ram.dut.ram_set[1][6] top.tb_ram.dut.ram_set[1][5] top.tb_ram.dut.ram_set[1][4] top.tb_ram.dut.ram_set[1][3] top.tb_ram.dut.ram_set[1][2] top.tb_ram.dut.ram_set[1][1] top.tb_ram.dut.ram_set[1][0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -16,7 +16,6 @@ end entity ram;
 architecture behaviour of ram is
 	type ram_t is array(0 to 255) of std_logic_vector(31 downto 0);
 	signal ram_set : ram_t := (others => (others => '0'));
-	signal test : std_logic;
 begin
 	data_mem: process(clk)
 	begin
