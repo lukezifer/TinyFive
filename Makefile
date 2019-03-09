@@ -7,7 +7,7 @@ SYNDIR := syn
 TOP := cpu
 EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=02
 ## Variable STOPTIME: set --stop-time, e.g. 100ns
-STOPTIME ?= 100ns
+STOPTIME ?= 500ns
 
 Q := 
 
