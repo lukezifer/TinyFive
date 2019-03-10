@@ -27,7 +27,7 @@ begin
 				internal_count <= std_logic_vector(unsigned(internal_count) + 4);
 			end if;
 		end if;
-	end process;
+	end process counter;
 
 	cnt <= internal_count;
 
