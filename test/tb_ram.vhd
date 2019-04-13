@@ -1,5 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
 
 entity tb_ram is
 end tb_ram;
@@ -33,15 +35,48 @@ end process clock;
 
 test: process
 begin
+	--Init, set inputs to zero
 	tb_r_en <= '0';
 	tb_w_en <= '0';
 	tb_addr <= "00000000";
 	tb_din <= x"00000000";
 	wait for CLOCK_PERIOD;
+	--Testcase 1, test RW
+	tb_r_en <= '0';
 	tb_w_en <= '1';
 	tb_addr <= "00000001";
 	tb_din <= x"00000001";
+	wait for CLOCK_PERIOD;
+	tb_r_en <= '1';
+	tb_w_en <= '0';
+	tb_addr <= "00000001";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed" severity error;
+	--Testcase 2, test simultan RW
+	tb_r_en <= '1';
+	tb_w_en <= '1';
+	tb_addr <= "00000010";
+	tb_din <= x"00000011";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed" severity error;
+	--Testcase 3, test async R
+	tb_r_en <= '1';
+	tb_w_en <= '1';
+	tb_addr <= "00000010";
+	tb_din <= x"00000011";
+	wait for CLOCK_PERIOD;
+	tb_r_en <= '0';
+	tb_w_en <= '1';
+	tb_addr <= "00000011";
+	tb_din <= x"00000111";
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '1';
+	tb_r_en <= '0';
+	tb_addr <= "00000110";
+	tb_din <= x"00001111";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed" severity error;
 	wait;
-
 end process test;
+
 end architecture behaviour;
