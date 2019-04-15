@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
 
 entity tb_rom is
 end tb_rom;
@@ -28,9 +29,14 @@ end process clock;
 
 test: process
 begin
+	--Init, set inputs to zero
+	tb_addr <= x"00";
+	wait for CLOCK_PERIOD;
 	for idx in 0 to 32 loop
 		tb_addr <= std_logic_vector(to_unsigned(idx, tb_addr'length));
 		wait for CLOCK_PERIOD;
+		wait on tb_clk;
+		assert(tb_dout = 16#00#) report "Testcase 1 failed" severity error;
 	end loop;
 	wait;
 end process test;
