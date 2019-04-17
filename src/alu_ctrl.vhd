@@ -16,6 +16,20 @@ architecture behaviour of alu_ctrl is
 begin
 	control: process(alu_op, instr_in)
 	begin
+		case alu_op is
+		--R-Type
+			when "10" =>
+				alu_instr <= "0010";
+		--B-Type
+			when "01" =>
+				alu_instr <= "0110";
+		--S-Type
+			when "00" =>
+				alu_instr => "0010";
+		--Avoid Latch
+			when others =>
+				alu_instr <= "1111";
+		end case;
 	end process control;
 
 end architecture behaviour;
