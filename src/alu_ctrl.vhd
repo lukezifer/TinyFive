@@ -12,7 +12,6 @@ port(
 end entity alu_ctrl;
 
 architecture behaviour of alu_ctrl is
-	signal output : std_logic_vector(31 downto 0);
 begin
 	control: process(alu_op, instr_in)
 	begin
@@ -25,11 +24,10 @@ begin
 				alu_instr <= "0110";
 		--S-Type
 			when "00" =>
-				alu_instr => "0010";
+				alu_instr <= "0010";
 		--Avoid Latch
 			when others =>
 				alu_instr <= "1111";
 		end case;
 	end process control;
-
 end architecture behaviour;
