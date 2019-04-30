@@ -9,7 +9,7 @@ end entity tb_alu_ctrl;
 architecture behaviour of tb_alu_ctrl is
 	Constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_alu_op	: std_logic_vector(1 downto 0);
-	signal tb_instr_in	: std_logic_vector(5 downto 0);
+	signal tb_instr_in	: std_logic_vector(31 downto 0);
 	signal tb_alu_instr	: std_logic_vector(3 downto 0);
 begin
 dut: entity work.alu_ctrl
