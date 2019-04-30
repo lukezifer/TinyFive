@@ -5,7 +5,7 @@ TESTDIR := test
 SYNDIR := syn
 
 TOP := cpu
-EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=02
+EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=93 -fexplicit
 ## Variable STOPTIME: set --stop-time, e.g. 100ns
 STOPTIME ?= 500ns
 
