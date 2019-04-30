@@ -104,19 +104,19 @@ begin
 	assert(tb_c_out = 0 and tb_z_flag = '1') report "slt Testcase 2 failed" severity error;
 	wait for CLOCK_PERIOD;
 	--NOR Testcase 1
-	tb_oper <= "1100";
-	tb_a_in <= x"F0F0F0F0";
-	tb_b_in <= x"0FFF0F00";
-	wait on tb_z_flag;
-	assert(tb_c_out = 16#0000000F# and tb_z_flag = '0') report "NOR Testcase 1 failed" severity error;
-	wait for CLOCK_PERIOD;
+	--tb_oper <= "1100";
+	--tb_a_in <= x"F0F0F0F0";
+	--tb_b_in <= x"0FFF0F00";
+	--wait on tb_z_flag;
+	--assert(tb_c_out = 16#0000000F# and tb_z_flag = '0') report "NOR Testcase 1 failed" severity error;
+	--wait for CLOCK_PERIOD;
 	--NOR Testcase 2
-	tb_oper <= "1100";
-	tb_a_in <= x"0F0F0F0F";
-	tb_b_in <= x"F0F0F0F0";
-	wait on tb_z_flag;
-	assert(tb_c_out = 0 and tb_z_flag = '1') report "NOR Testcase 2 failed" severity error;
-	wait for CLOCK_PERIOD;
+	--tb_oper <= "1100";
+	--tb_a_in <= x"0F0F0F0F";
+	--tb_b_in <= x"F0F0F0F0";
+	--wait on tb_z_flag;
+	--assert(tb_c_out = 0 and tb_z_flag = '1') report "NOR Testcase 2 failed" severity error;
+	--wait for CLOCK_PERIOD;
 	--Default Testcase
 	tb_oper <= "1111";
 	tb_a_in <= x"FFFF0000";

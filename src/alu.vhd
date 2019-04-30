@@ -38,9 +38,6 @@ begin
 				else
 					output <= x"00000000";
 				end if;
-			--NOR
-			when "1100" =>
-				output <= a_in nor b_in;
 			--default
 			when others =>
 				output <= x"00000000";
