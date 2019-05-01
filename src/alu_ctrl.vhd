@@ -13,10 +13,10 @@ end entity alu_ctrl;
 
 architecture behaviour of alu_ctrl is
 	signal funct3 : std_logic_vector(2 downto 0);
-	signal funct7 : std_logic_vector(6 downto 0);
+	signal funct7 : std_logic;
 begin
 	funct3 <= instr_in(14 downto 12);
-	funct7 <= instr_in(31 downto 25);
+	funct7 <= instr_in(30);
 
 	control: process(alu_op, instr_in)
 	begin
@@ -24,19 +24,19 @@ begin
 		--R-Type
 			when "10" =>
 				--ADD
-				if funct3 = "000" and funct7 = "0000000" then
+				if funct3 = "000" and funct7 = '0' then
 					alu_instr <= "0010";
 				--SUB
-				elsif funct3 = "000" and funct7 = "0100000" then
+				elsif funct3 = "000" and funct7 = '1' then
 					alu_instr <= "0110";
 				--SLT
-				elsif funct3 = "010" and funct7 = "0000000" then
+				elsif funct3 = "010" and funct7 = '0' then
 					alu_instr <= "0111";
 				--OR
-				elsif funct3 = "110" and funct7 = "0000000" then
+				elsif funct3 = "110" and funct7 = '0' then
 					alu_instr <= "0001";
 				--AND
-				elsif funct3 = "111" and funct7 = "0000000" then
+				elsif funct3 = "111" and funct7 = '0' then
 					alu_instr <= "0010";
 				--others to AND
 				else
