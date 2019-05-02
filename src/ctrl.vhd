@@ -33,6 +33,16 @@ begin
 				mem_write <= '0';
 				alu_src <= '0';
 				reg_write <= '1';
+			--I-Instruction 0010011
+			when "0010011" =>
+				reg_dst <= '1';
+				branch <= '0';
+				mem_read <= '0';
+				mem_to_reg <= '0';
+				alu_op <= "10";
+				mem_write <= '0';
+				alu_src <= '1';
+				reg_write <= '1';
 			--Others not implemented yet
 			when others =>
 				reg_dst <= '1';
