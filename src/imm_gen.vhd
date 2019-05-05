@@ -11,8 +11,22 @@ port(
 end imm_gen;
 
 architecture behaviour of imm_gen is
+	signal instr_type : std_logic_vector(6 downto 0);
 begin
-	immediate_out <= std_logic_vector(resize(signed(instr_in(31) & instr_in(7) & instr_in(30 downto 25) & instr_in(11 downto 8)), immediate_out'length));
+	instr_type <= instr_in(6 downto 0);
+	process(instr_in, instr_type)
+	begin
+	case instr_type is
+		--B-Type
+		when "1100011" =>
+			immediate_out <= std_logic_vector(resize(signed(instr_in(31) & instr_in(7) & instr_in(30 downto 25) & instr_in(11 downto 8)), immediate_out'length));
+		--I-Type
+		when "0010011" =>
+			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 20)), immediate_out'length));
+		when others =>
+			immediate_out <= (others => '0');
+	end case;
+	end process;
 
 end architecture behaviour;
 
