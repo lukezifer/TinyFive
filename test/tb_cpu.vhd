@@ -27,8 +27,9 @@ end process clock;
 run : process
 begin
 	rst <= '1';
-	wait for CLOCK_PERIOD;
+	wait for 2 * CLOCK_PERIOD;
 	rst <= '0';
+	wait;
 end process run;
 
 end behaviour;

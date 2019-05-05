@@ -12,7 +12,7 @@ end entity rom;
 
 architecture behaviour of rom is
 	type rom_t is array(0 to 255) of std_logic_vector(31 downto 0);
-	signal rom_set : rom_t := (others => (others => '0'));
+	signal rom_set : rom_t := (others => "00000000000000000000000000010011");
 begin
 	instr_mem: process(clk)
 	begin

@@ -1,0 +1,57 @@
+[*]
+[*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
+[*] Sun May  5 21:51:45 2019
+[*]
+[dumpfile] "/mnt/Data/workspace/risc_v_tiny/syn/tb_cpu.vcd"
+[dumpfile_mtime] "Sun May  5 21:40:48 2019"
+[dumpfile_size] 17150
+[savefile] "/mnt/Data/workspace/risc_v_tiny/test/tb_cpu.gtkw"
+[timestart] 0
+[size] 1080 1894
+[pos] -1 -1
+*-24.000000 2760000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_cpu.
+[treeopen] tb_cpu.dut.
+[sst_width] 231
+[signals_width] 238
+[sst_expanded] 1
+[sst_vpaned_height] 593
+@28
+tb_cpu.dut.alu_ctrl_alu_instr[3:0]
+@420
+tb_cpu.dut.alu_out[31:0]
+@28
+tb_cpu.dut.alu_z_flag
+tb_cpu.dut.clk
+@23
+tb_cpu.dut.cpu_alu_mem_out[31:0]
+@22
+tb_cpu.dut.cpu_alu_src_data[31:0]
+tb_cpu.dut.cpu_branch_immediate[63:0]
+@28
+tb_cpu.dut.ctrl_alu_op[1:0]
+tb_cpu.dut.ctrl_alu_src
+tb_cpu.dut.ctrl_branch
+tb_cpu.dut.ctrl_mem_read
+tb_cpu.dut.ctrl_mem_to_reg
+tb_cpu.dut.ctrl_mem_write
+tb_cpu.dut.ctrl_reg_dest
+tb_cpu.dut.ctrl_reg_write
+@22
+tb_cpu.dut.imm_gen_output[63:0]
+@28
+tb_cpu.dut.pc_en
+@22
+tb_cpu.dut.pc_in[31:0]
+@28
+tb_cpu.dut.pc_ld
+@22
+tb_cpu.dut.pc_out[31:0]
+tb_cpu.dut.ram_out[31:0]
+tb_cpu.dut.reg_r_data1[31:0]
+tb_cpu.dut.reg_r_data2[31:0]
+tb_cpu.dut.rom_instr[31:0]
+@28
+tb_cpu.dut.rst
+[pattern_trace] 1
+[pattern_trace] 0

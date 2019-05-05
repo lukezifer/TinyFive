@@ -18,7 +18,6 @@ architecture behaviour of cpu is
 	signal rom_instr : std_logic_vector(31 downto 0);
 	signal reg_r_data1 : std_logic_vector(31 downto 0);
 	signal reg_r_data2 : std_logic_vector(31 downto 0);
-	signal reg_w_enable : std_logic;
 	signal ctrl_reg_dest : std_logic;
 	signal ctrl_branch : std_logic;
 	signal ctrl_mem_read : std_logic;
