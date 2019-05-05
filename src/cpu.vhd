@@ -32,8 +32,9 @@ architecture behaviour of cpu is
 	signal alu_z_flag : std_logic;
 	signal ram_out : std_logic_vector(31 downto 0);
 	signal cpu_alu_src_data : std_logic_vector(31 downto 0);
-	signal cpu_immediate_gen : std_logic_vector(63 downto 0);
+	signal imm_gen_output : std_logic_vector(63 downto 0);
 	signal cpu_alu_mem_out : std_logic_vector (31 downto 0);
+	signal cpu_branch_immediate : std_logic_vector (63 downto 0);
 begin
 
 pc : entity work.pc
@@ -108,15 +109,18 @@ port map(
 imm_gen : entity work.imm_gen
 port map(
 	instr_in => rom_instr(31 downto 0),
-	immediate_out => cpu_immediate_gen
+	immediate_out => imm_gen_output
 	);
 
-alu_src : process (ctrl_alu_src, reg_r_data2, cpu_immediate_gen)
+cpu_branch_immediate <= std_logic_vector(shift_left(unsigned(imm_gen_output), 1));
+pc_in <= std_logic_vector(signed(pc_out) + signed(cpu_branch_immediate(31 downto 0)));
+
+alu_src : process (ctrl_alu_src, reg_r_data2, imm_gen_output)
 begin
 	if(ctrl_alu_src = '0') then
 		cpu_alu_src_data <= reg_r_data2;
 	else
-		cpu_alu_src_data <= cpu_immediate_gen(31 downto 0);
+		cpu_alu_src_data <= imm_gen_output(31 downto 0);
 	end if;
 end process alu_src;
 
@@ -132,7 +136,11 @@ end process reg_write_src;
 pc_src: process(ctrl_branch, alu_z_flag, pc_out)
 begin
 	if(ctrl_branch = '1' and alu_z_flag = '1') then
+		pc_en <= '0';
+		pc_ld <= '1';
 	else
+		pc_en <= '1';
+		pc_ld <= '0';
 	end if;
 end process pc_src;
 
