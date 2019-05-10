@@ -5,7 +5,7 @@ TESTDIR := test
 SYNDIR := syn
 
 TOP := cpu
-EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=93 -fexplicit
+EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=93c -fexplicit
 ## Variable STOPTIME: set --stop-time, e.g. 100ns
 STOPTIME ?= 500ns
 
@@ -41,6 +41,7 @@ tb_eleborate: $(tb_eleborate_top_target)
 #run_%: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
 
 %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	mkdir -p $(SYNDIR)
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $^
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
 
@@ -51,12 +52,14 @@ tb_eleborate.%: $(TESTDIR)/%.vhd
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) $*
 
 tb_analysis.%: $(TESTDIR)/%.vhd
+	mkdir -p $(SYNDIR)
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $<
 
 eleborate.%: $(SRCDIR)/%.vhd
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) $*
 
 analysis.%: $(SRCDIR)/%.vhd
+	mkdir -p $(SYNDIR)
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $<
 
 run:
