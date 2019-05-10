@@ -7,12 +7,20 @@ entity tb_imm_gen is
 end tb_imm_gen;
 
 architecture behaviour of tb_imm_gen is
+	component imm_gen is
+		port(
+			instr_in : in std_logic_vector(31 downto 0);
+			immediate_out : out std_logic_vector(63 downto 0)
+		);
+	end component imm_gen;
+
 	Constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_instr_in : std_logic_vector(31 downto 0);
 	signal tb_immediate_out : std_logic_vector(63 downto 0);
 	signal tb_result : signed(63 downto 0);
+
 begin
-dut: entity work.imm_gen
+dut: imm_gen
 port map(
 	instr_in => tb_instr_in,
 	immediate_out => tb_immediate_out

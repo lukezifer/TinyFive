@@ -6,13 +6,24 @@ use ieee.std_logic_unsigned.all;
 entity tb_rom is
 end tb_rom;
 
+
 architecture behaviour of tb_rom is
+
+	component rom
+		port(
+			clk : in std_logic;
+			addr : in std_logic_vector(7 downto 0);
+			dout : out std_logic_vector(31 downto 0)
+		);
+	end component;
+
 	constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_clk  : std_logic;
 	signal tb_addr : std_logic_vector(7 downto 0);
 	signal tb_dout : std_logic_vector(31 downto 0);
+
 begin
-dut: entity work.rom
+dut: rom
 port map(
 	clk  => tb_clk,
 	addr => tb_addr,

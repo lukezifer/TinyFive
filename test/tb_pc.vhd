@@ -6,6 +6,17 @@ entity tb_pc is
 end tb_pc;
 
 architecture behaviour of tb_pc is
+	component pc is
+		port(
+			clk : in std_logic;
+			rst : in std_logic;
+			ld : in std_logic;
+			en : in std_logic;
+			data_in : in std_logic_vector(31 downto 0);
+			cnt : out std_logic_vector(31 downto 0)
+			);
+	end component pc;
+
 	constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_clk		: std_logic;
 	signal tb_rst		: std_logic;
@@ -15,8 +26,7 @@ architecture behaviour of tb_pc is
 	signal tb_cnt		: std_logic_vector(31 downto 0);
 
 begin
-
-dut : entity work.pc
+dut: pc
 port map(
 	clk		=> tb_clk,
 	rst		=> tb_rst,

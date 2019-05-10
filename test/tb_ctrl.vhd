@@ -7,6 +7,20 @@ entity tb_ctrl is
 end entity tb_ctrl;
 
 architecture behaviour of tb_ctrl is
+	component ctrl is
+		port(
+			opcode : in std_logic_vector(6 downto 0);
+			reg_dst : out std_logic;
+			branch : out std_logic;
+			mem_read : out std_logic;
+			mem_to_reg : out std_logic;
+			alu_op : out std_logic_vector(1 downto 0);
+			mem_write : out std_logic;
+			alu_src : out std_logic;
+			reg_write : out std_logic
+			);
+	end component;
+
 	Constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_opcode	: std_logic_vector(6 downto 0);
 	signal tb_reg_dst	: std_logic;
@@ -16,8 +30,9 @@ architecture behaviour of tb_ctrl is
 	signal tb_alu_op	: std_logic_vector(1 downto 0);
 	signal tb_mem_write	: std_logic;
 	signal tb_reg_write	: std_logic;
+
 begin
-dut: entity work.ctrl
+dut: ctrl
 port map(
 	opcode => tb_opcode,
 	reg_dst => tb_reg_dst,

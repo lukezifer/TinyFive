@@ -5,12 +5,20 @@ entity tb_cpu is
 end tb_cpu;
 
 architecture behaviour of tb_cpu is
+	component cpu is
+		port(
+			clk : in std_logic;
+			rst : in std_logic
+		);
+	end component;
+
 	constant CLOCK_PERIOD : time := 10 ns;
 	signal clk		: std_logic;
 	signal rst		: std_logic;
+
 begin
 
-dut : entity work.cpu
+dut: cpu
 port map(
 	clk		=> clk,
 	rst		=> rst

@@ -7,14 +7,25 @@ entity tb_alu is
 end entity tb_alu;
 
 architecture behaviour of tb_alu is
+	component alu is
+		port(
+			oper : in std_logic_vector(3 downto 0);
+			a_in : in std_logic_vector(31 downto 0);
+			b_in : in std_logic_vector(31 downto 0);
+			c_out : out std_logic_vector(31 downto 0);
+			z_flag : out std_logic
+		);
+
+	end component alu;
 	Constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_oper	: std_logic_vector(3 downto 0);
 	signal tb_a_in	: std_logic_vector(31 downto 0);
 	signal tb_b_in	: std_logic_vector(31 downto 0);
 	signal tb_c_out	: std_logic_vector(31 downto 0);
 	signal tb_z_flag: std_logic;
+
 begin
-dut: entity work.alu
+dut: alu
 port map(
 	oper   => tb_oper,
 	a_in   => tb_a_in,

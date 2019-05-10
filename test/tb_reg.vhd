@@ -5,6 +5,20 @@ entity tb_reg is
 end tb_reg;
 
 architecture behaviour of tb_reg is
+	component reg is
+		port(
+			clk : in std_logic;
+			rst : in std_logic;
+			r_addr1 : in std_logic_vector(4 downto 0);
+			r_data1 : out std_logic_vector(31 downto 0);
+			r_addr2 : in std_logic_vector(4 downto 0);
+			r_data2 : out std_logic_vector(31 downto 0);
+			w_addr : in std_logic_vector(4 downto 0);
+			w_data : in std_logic_vector(31 downto 0);
+			w_enable : in std_logic
+		);
+
+	end component;
 	constant CLOCK_PERIOD : time := 10 ns;
 	signal tb_clk : std_logic;
 	signal tb_rst : std_logic;
@@ -15,9 +29,9 @@ architecture behaviour of tb_reg is
 	signal tb_w_addr : std_logic_vector(4 downto 0);
 	signal tb_w_data : std_logic_vector(31 downto 0);
 	signal tb_w_enable : std_logic;
-begin
 
-dut: entity work.reg
+begin
+dut: reg
 port map(
 	clk => tb_clk,
 	rst => tb_rst,
