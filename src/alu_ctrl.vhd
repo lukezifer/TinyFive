@@ -45,6 +45,10 @@ begin
 		--B-Type
 			when "01" =>
 				alu_instr <= "0110";
+				--beq
+				if funct3 = "000" then
+					alu_instr <= "0110";
+				end if;
 		--S-Type
 			when "00" =>
 				alu_instr <= "0010";

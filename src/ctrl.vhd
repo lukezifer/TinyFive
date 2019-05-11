@@ -40,6 +40,15 @@ begin
 				mem_write <= '0';
 				alu_src <= '1';
 				reg_write <= '1';
+			--B-Instruction 1100011
+			when "1100011" =>
+				branch <= '1';
+				mem_read <= '0';
+				mem_to_reg <= '0';
+				alu_op <= "01";
+				mem_write <= '0';
+				alu_src <= '0';
+				reg_write <= '0';
 			--Others not implemented yet
 			when others =>
 				branch <= '0';
