@@ -11,6 +11,89 @@ port(
 end cpu;
 
 architecture behaviour of cpu is
+
+	component pc is
+		port (
+			clk : in std_logic;
+			rst : in std_logic;
+			ld : in std_logic;
+			en : in std_logic;
+			data_in : in std_logic_vector(31 downto 0);
+			cnt : out std_logic_vector(31 downto 0)
+	);
+	end component pc;
+
+	component rom is
+		port (
+			clk : in std_logic;
+			addr : in std_logic_vector(7 downto 0);
+			dout : out std_logic_vector(31 downto 0)
+	);
+	end component rom;
+
+	component reg is
+		port (
+			clk : in std_logic;
+			rst : in std_logic;
+			r_addr1 : in std_logic_vector(4 downto 0);
+			r_addr2 : in std_logic_vector(4 downto 0);
+			r_data1 : out std_logic_vector(31 downto 0);
+			r_data2 : out std_logic_vector(31 downto 0);
+			w_addr : in std_logic_vector(4 downto 0);
+			w_data : in std_logic_vector(31 downto 0);
+			w_enable : in std_logic
+		);
+	end component reg;
+
+	component ctrl is
+		port (
+			opcode : in std_logic_vector(6 downto 0);
+			branch : out std_logic;
+			mem_read : out std_logic;
+			mem_to_reg : out std_logic;
+			alu_op : out std_logic_vector(1 downto 0);
+			mem_write : out std_logic;
+			alu_src : out std_logic;
+			reg_write : out std_logic
+		);
+	end component ctrl;
+
+	component alu_ctrl is
+		port (
+			alu_op : in std_logic_vector(1 downto 0);
+			instr_in : in std_logic_vector(31 downto 0);
+			alu_instr : out std_logic_vector(3 downto 0)
+	);
+	end component alu_ctrl;
+
+	component alu is
+		port (
+			oper : in std_logic_vector(3 downto 0);
+			a_in : in std_logic_vector(31 downto 0);
+			b_in : in std_logic_vector(31 downto 0);
+			c_out : out std_logic_vector(31 downto 0);
+			z_flag : out std_logic
+		);
+	end component alu;
+
+	component ram is
+		port (
+			clk : in std_logic;
+			addr : in std_logic_vector(7 downto 0);
+			r_en : in std_logic;
+			w_en : in std_logic;
+			din : in std_logic_vector(31 downto 0);
+			dout : out std_logic_vector(31 downto 0)
+		);
+	end component ram;
+
+	component imm_gen is
+		port (
+			instr_in : in std_logic_vector(31 downto 0);
+			immediate_out : out std_logic_vector(63 downto 0)
+		);
+	end component imm_gen;
+
 	signal pc_en : std_logic;
 	signal pc_ld : std_logic;
 	signal pc_in : std_logic_vector(31 downto 0);
@@ -36,7 +119,7 @@ architecture behaviour of cpu is
 	signal cpu_branch_immediate : std_logic_vector (63 downto 0);
 begin
 
-pc : entity work.pc
+program_counter: pc
 port map(
 	clk => clk,
 	rst => rst,
@@ -46,14 +129,14 @@ port map(
 	cnt => pc_out
 	);
 
-rom : entity work.rom
+read_only_memory: rom
 port map(
 	clk => clk,
 	addr => pc_out(7 downto 0),
 	dout => rom_instr
 	);
 
-reg : entity work.reg
+registers: reg
 port map(
 	clk => clk,
 	rst => rst,
@@ -66,7 +149,7 @@ port map(
 	w_enable => ctrl_reg_write
 	);
 
-ctrl : entity work.ctrl
+control: ctrl
 port map(
 	opcode => rom_instr(6 downto 0),
 	reg_dst => ctrl_reg_dest,
@@ -79,14 +162,14 @@ port map(
 	reg_write => ctrl_reg_write
 	);
 
-alu_ctrl : entity work.alu_ctrl
+alu_control: alu_ctrl
 port map(
 	alu_op => ctrl_alu_op,
 	instr_in => rom_instr,
 	alu_instr => alu_ctrl_alu_instr
 	);
 
-alu : entity work.alu
+arithmetic_logic_unit: alu
 port map(
 	oper => alu_ctrl_alu_instr,
 	a_in => reg_r_data1,
@@ -95,7 +178,7 @@ port map(
 	z_flag => alu_z_flag
 	);
 
-ram : entity work.ram
+random_access_memory: ram
 port map(
 	clk => clk,
 	addr => alu_out(7 downto 0),
@@ -105,7 +188,7 @@ port map(
 	dout => ram_out
 	);
 
-imm_gen : entity work.imm_gen
+immedaite_generate : imm_gen
 port map(
 	instr_in => rom_instr(31 downto 0),
 	immediate_out => imm_gen_output
