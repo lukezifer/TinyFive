@@ -101,7 +101,6 @@ architecture behaviour of cpu is
 	signal rom_instr : std_logic_vector(31 downto 0);
 	signal reg_r_data1 : std_logic_vector(31 downto 0);
 	signal reg_r_data2 : std_logic_vector(31 downto 0);
-	signal ctrl_reg_dest : std_logic;
 	signal ctrl_branch : std_logic;
 	signal ctrl_mem_read : std_logic;
 	signal ctrl_mem_to_reg : std_logic;
@@ -152,7 +151,6 @@ port map(
 control: ctrl
 port map(
 	opcode => rom_instr(6 downto 0),
-	reg_dst => ctrl_reg_dest,
 	branch => ctrl_branch,
 	mem_read => ctrl_mem_read,
 	mem_to_reg => ctrl_mem_to_reg,

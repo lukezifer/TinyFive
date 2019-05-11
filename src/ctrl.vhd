@@ -6,7 +6,6 @@ use ieee.numeric_std.all;
 entity ctrl is
 port(
 	opcode	: in	std_logic_vector(6 downto 0);
-	reg_dst	: out	std_logic;
 	branch	: out	std_logic;
 	mem_read	: out	std_logic;
 	mem_to_reg	: out	std_logic;
@@ -25,7 +24,6 @@ begin
 		case (opcode) is
 			--R-Instruction 0110011
 			when "0110011" =>
-				reg_dst <= '1';
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
@@ -35,7 +33,6 @@ begin
 				reg_write <= '1';
 			--I-Instruction 0010011
 			when "0010011" =>
-				reg_dst <= '1';
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
@@ -45,7 +42,6 @@ begin
 				reg_write <= '1';
 			--Others not implemented yet
 			when others =>
-				reg_dst <= '1';
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
