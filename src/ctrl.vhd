@@ -60,5 +60,6 @@ begin
 				reg_write <= '1';
 		end case;
 	end process decode;
+
 end architecture behaviour;
 
