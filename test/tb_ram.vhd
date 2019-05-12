@@ -63,14 +63,14 @@ begin
 	tb_w_en <= '0';
 	tb_addr <= "00000001";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed" severity error;
+	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed" severity failure;
 	--Testcase 2, test simultan RW
 	tb_r_en <= '1';
 	tb_w_en <= '1';
 	tb_addr <= "00000010";
 	tb_din <= x"00000011";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed" severity error;
+	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed" severity failure;
 	--Testcase 3, test async R
 	tb_r_en <= '1';
 	tb_w_en <= '1';
@@ -87,7 +87,7 @@ begin
 	tb_addr <= "00000110";
 	tb_din <= x"00001111";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed" severity error;
+	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed" severity failure;
 	wait;
 end process test;
 

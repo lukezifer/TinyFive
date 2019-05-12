@@ -34,28 +34,28 @@ begin
 	--bne x10, x11, 2000 B-Type
 	tb_instr_in <= "01111100101101010001100001100011";
 	wait for CLOCK_PERIOD;
-	assert(tb_result = 1000) report "Immediate B-Type Testcase 1 failed" severity error;
+	assert(tb_result = 1000) report "Immediate B-Type Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--bne x10, x11, -100 B-Type
 	tb_instr_in <= "11111000101101010001111011100011";
 	--wait on tb_result;
 	wait for CLOCK_PERIOD;
-	assert(tb_result = -50) report "Immediate B-Type Testcase 2 failed" severity error;
+	assert(tb_result = -50) report "Immediate B-Type Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--addi x1, x2, 100 I-Type
 	tb_instr_in <= "00000110010000001000000100010011";
 	wait for CLOCK_PERIOD;
-	assert(tb_result = 100) report "Immediate I-Type Testcase 1 failed" severity error;
+	assert(tb_result = 100) report "Immediate I-Type Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--addi x1, x2, -42 I-Type
 	tb_instr_in <= "11111101011000001000000100010011";
 	wait for CLOCK_PERIOD;
-	assert(tb_result = -42) report "Immediate I-Type Testcase 2 failed" severity error;
+	assert(tb_result = -42) report "Immediate I-Type Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--add x1, x2, x3 R-Type
 	tb_instr_in <= "00000000001100010000000010110011";
 	wait for CLOCK_PERIOD;
-	assert(tb_result = 0) report "Immediate R-Type Testcase 1 failed" severity error;
+	assert(tb_result = 0) report "Immediate R-Type Testcase 1 failed" severity failure;
 	wait;
 end process test;
 end architecture behaviour;

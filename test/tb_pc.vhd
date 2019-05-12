@@ -52,62 +52,62 @@ begin
 	tb_data_in <= x"00000000";
 	tb_rst <= '1';
 	wait on tb_cnt;
-	assert (tb_cnt = 0) report "Initialization failed" severity error;
+	assert (tb_cnt = 0) report "Initialization failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--Counting Testcase 1
 	tb_rst <= '0';
 	tb_en <= '1';
 	wait on tb_cnt;
-	assert (tb_cnt = 4) report "Counting Testcase 1 failed" severity error;
+	assert (tb_cnt = 4) report "Counting Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--Counting Testcase 2
 	wait on tb_cnt;
-	assert (tb_cnt = 8) report "Counting Testcase 2 failed" severity error;
+	assert (tb_cnt = 8) report "Counting Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--Load Testcase 1
 	tb_data_in <= x"0000FFF0";
 	tb_ld <= '1';
 	wait on tb_cnt;
-	assert (tb_cnt = 16#FFF0#) report "Load Testcase 1 failed" severity error;
+	assert (tb_cnt = 16#FFF0#) report "Load Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	tb_ld <= '0';
 	wait for CLOCK_PERIOD;
 	wait for CLOCK_PERIOD;
-	assert (tb_cnt = 16#FFF8#) report "Load Testcase 1 failed" severity error;
+	assert (tb_cnt = 16#FFF8#) report "Load Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--Load Testcase 2
 	tb_data_in <= x"000000F0";
 	tb_ld <= '1';
 	wait on tb_cnt;
-	assert (tb_cnt = 16#F0#) report "Load Testcase 2 failed" severity error;
+	assert (tb_cnt = 16#F0#) report "Load Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	tb_ld <= '0';
 	wait for CLOCK_PERIOD;
 	wait for CLOCK_PERIOD;
-	assert (tb_cnt = 16#F8#) report "Load Testcase 2 failed" severity error;
+	assert (tb_cnt = 16#F8#) report "Load Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--Reset Testcase 1
 	tb_ld <= '1';
 	tb_en <= '1';
 	tb_rst <= '1';
 	wait on tb_cnt;
-	assert (tb_cnt = 0) report "Reset Testcase 1 failed" severity error;
+	assert (tb_cnt = 0) report "Reset Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	tb_ld <= '0';
 	tb_en <= '1';
 	tb_rst <= '0';
 	wait on tb_cnt;
 	wait for CLOCK_PERIOD;
-	assert (tb_cnt = 4) report "Reset Testcase 1 failed" severity error;
+	assert (tb_cnt = 4) report "Reset Testcase 1 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--Reset Testcase 2
 	tb_rst <= '1';
 	tb_en <= '0';
 	wait on tb_cnt;
-	assert (tb_cnt = 0) report "Reset Testcase 2 failed" severity error;
+	assert (tb_cnt = 0) report "Reset Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
 	wait for CLOCK_PERIOD;
-	assert (tb_cnt = 0) report "Reset Testcase 2 failed" severity error;
+	assert (tb_cnt = 0) report "Reset Testcase 2 failed" severity failure;
 	wait;
 end process run;
 
