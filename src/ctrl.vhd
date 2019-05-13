@@ -36,7 +36,7 @@ begin
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= "10";
+				alu_op <= "00";
 				mem_write <= '0';
 				alu_src <= '1';
 				reg_write <= '1';

@@ -48,10 +48,26 @@ begin
 				--beq
 				if funct3 = "000" then
 					alu_instr <= "0110";
+				else
+					alu_instr <= "1111";
 				end if;
-		--S-Type
+		--S-Type and I-Type
 			when "00" =>
-				alu_instr <= "0010";
+				--addi, lb
+				if funct3 = "000" then
+					alu_instr <= "0010";
+				--slti
+				elsif funct3 = "010" then
+					alu_instr <= "0111";
+				--ori
+				elsif funct3 = "110" then
+					alu_instr <= "0001";
+				--andi
+				elsif funct3 = "111" then
+					alu_instr <= "0000";
+				else
+					alu_instr <= "1111";
+				end if;
 		--Avoid Latch
 			when others =>
 				alu_instr <= "1111";
