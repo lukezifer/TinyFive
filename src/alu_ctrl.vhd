@@ -18,7 +18,7 @@ begin
 	funct3 <= instr_in(14 downto 12);
 	funct7 <= instr_in(30);
 
-	control: process(alu_op, instr_in)
+	control: process(alu_op, funct3, funct7)
 	begin
 		case alu_op is
 		--R-Type
@@ -37,7 +37,7 @@ begin
 					alu_instr <= "0001";
 				--AND
 				elsif funct3 = "111" and funct7 = '0' then
-					alu_instr <= "0010";
+					alu_instr <= "0000";
 				--others to AND
 				else
 					alu_instr <= "0100";
