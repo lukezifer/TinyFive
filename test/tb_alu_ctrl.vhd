@@ -59,7 +59,28 @@ begin
 	assert (tb_alu_instr = "0000") report ("R-Type AND failed") severity failure;
 	wait for CLOCK_PERIOD;
 
-wait;
+	--I-Type
+	--addi 2, 1, 10
+	tb_instr_in <= "00000000101000001000000100010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = "0010") report ("I-Type ADDI failed") severity failure;
+	wait for CLOCK_PERIOD;
+	--andi 2, 1, 10
+	tb_instr_in <= "00000000101000001111000100010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = "0000") report ("I-Type ANDI failed") severity failure;
+	wait for CLOCK_PERIOD;
+	--ori 2, 1, 10
+	tb_instr_in <= "00000000101000001110000100010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = "0001") report ("I-Type ORI failed") severity failure;
+	wait for CLOCK_PERIOD;
+	--slti 2, 1, 10
+	tb_instr_in <= "00000000101000001010000100010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = "0111") report ("I-Type SLTI failed") severity failure;
+	wait for CLOCK_PERIOD;
+	wait;
 
 end process test;
 
