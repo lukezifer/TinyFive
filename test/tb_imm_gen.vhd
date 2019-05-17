@@ -52,6 +52,16 @@ begin
 	wait for CLOCK_PERIOD;
 	assert(tb_result = -42) report "Immediate I-Type Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
+	--sw x1, x0F(x2)
+	tb_instr_in <= "00000000001000001001011110100011";
+	wait for CLOCK_PERIOD;
+	assert(tb_result = 15) report "Immediate S-Type Testcase 1 failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--sw x1, -x0F(x2)
+	tb_instr_in <= "11111110001000001001100010100011";
+	wait for CLOCK_PERIOD;
+	assert(tb_result = -15) report "Immediate S-Type Testcase 2 failed" severity failure;
+	wait for CLOCK_PERIOD;
 	--add x1, x2, x3 R-Type
 	tb_instr_in <= "00000000001100010000000010110011";
 	wait for CLOCK_PERIOD;

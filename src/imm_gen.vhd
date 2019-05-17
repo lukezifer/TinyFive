@@ -23,6 +23,9 @@ begin
 		--I-Type
 		when "0010011" =>
 			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 20)), immediate_out'length));
+		--S-Type
+		when "0100011" =>
+			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 25) & instr_in(11 downto 7)), immediate_out'length));
 		when others =>
 			immediate_out <= (others => '0');
 	end case;
