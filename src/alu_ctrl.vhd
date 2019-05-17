@@ -42,16 +42,7 @@ begin
 				else
 					alu_instr <= "0100";
 				end if;
-		--B-Type
-			when "01" =>
-				alu_instr <= "0110";
-				--beq
-				if funct3 = "000" then
-					alu_instr <= "0110";
-				else
-					alu_instr <= "1111";
-				end if;
-		--S-Type and I-Type
+		--I-Type
 			when "00" =>
 				--addi, lb
 				if funct3 = "000" then
@@ -68,7 +59,10 @@ begin
 				else
 					alu_instr <= "1111";
 				end if;
-		--Avoid Latch
+		--S-Type
+			when "11" =>
+				alu_instr <= "0010";
+		--default
 			when others =>
 				alu_instr <= "1111";
 		end case;

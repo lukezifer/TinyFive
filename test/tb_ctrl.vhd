@@ -77,7 +77,7 @@ begin
 	assert (tb_mem_read = '0') report " I-Type mem_read failed" severity failure;
 	assert (tb_mem_write = '0') report " I-Type mem_write failed" severity failure;
 	assert (tb_branch = '0') report " I-Type branch failed" severity failure;
-	assert (tb_alu_op = "10") report "I-Type alu_op failed" severity failure;
+	assert (tb_alu_op = "00") report "I-Type alu_op failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--B-Type
 	tb_opcode <= "1100011";
@@ -89,6 +89,17 @@ begin
 	assert (tb_mem_write = '0') report " B-Type mem_write failed" severity failure;
 	assert (tb_branch = '1') report " B-Type branch failed" severity failure;
 	assert (tb_alu_op = "01") report "B-Type alu_op failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--S-Type
+	tb_opcode <= "0100011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_src = '1') report " S-Type alu_src failed" severity failure;
+	assert (tb_mem_to_reg = '0' or tb_mem_to_reg = '1') report " S-Type mem_to_reg failed" severity failure;
+	assert (tb_reg_write = '0') report " S-Type reg_write failed" severity failure;
+	assert (tb_mem_read = '0') report " S-Type mem_read failed" severity failure;
+	assert (tb_mem_write = '1') report " S-Type mem_write failed" severity failure;
+	assert (tb_branch = '0') report " S-Type branch failed" severity failure;
+	assert (tb_alu_op = "11") report "S-Type alu_op failed" severity failure;
 	wait for CLOCK_PERIOD;
 	wait;
 end process test;
