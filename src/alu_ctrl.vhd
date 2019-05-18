@@ -38,9 +38,8 @@ begin
 				--AND
 				elsif funct3 = "111" and funct7 = '0' then
 					alu_instr <= "0000";
-				--others to AND
 				else
-					alu_instr <= "0100";
+					alu_instr <= "1111";
 				end if;
 		--I-Type
 			when "00" =>

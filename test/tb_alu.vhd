@@ -72,6 +72,20 @@ begin
 	wait on tb_z_flag;
 	assert(tb_c_out = 0 and tb_z_flag = '1') report "OR Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
+	--XOR Testcase 1
+	tb_oper <= "0011";
+	tb_a_in <= x"FFFFFFFF";
+	tb_b_in <= x"F0F0F0F0";
+	wait on tb_z_flag;
+	assert(tb_c_out = 16#0F0F0F0F# and tb_z_flag = '0') report "XOR Testcase 1 failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--XOR Testcase 2
+	tb_oper <= "0011";
+	tb_a_in <= x"11111111";
+	tb_b_in <= x"11111111";
+	wait on tb_z_flag;
+	assert(tb_c_out = 0 and tb_z_flag = '1') report "XOR Testcase 2 failed" severity failure;
+	wait for CLOCK_PERIOD;
 	--add Testcase 1
 	tb_oper <= "0010";
 	tb_a_in <= x"00000001";

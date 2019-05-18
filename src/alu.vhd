@@ -25,13 +25,16 @@ begin
 			--OR
 			when "0001" =>
 				output <= a_in or b_in;
-			--add
+			--XOR
+			when "0011" =>
+				output <= a_in xor b_in;
+			--ADD
 			when "0010" =>
 				output <= std_logic_vector(signed(a_in) + signed(b_in));
-			--sub
+			--SUB
 			when "0110" =>
 				output <= a_in - b_in;
-			--slt
+			--SLT
 			when "0111" =>
 				if(signed(a_in) < signed(b_in)) then
 					output <= x"00000001";
