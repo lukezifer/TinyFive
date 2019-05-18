@@ -60,6 +60,8 @@ begin
 	wait for CLOCK_PERIOD;
 
 	--I-Type
+	tb_alu_op <= "00";
+	wait for CLOCK_PERIOD;
 	--addi 2, 1, 10
 	tb_instr_in <= "00000000101000001000000100010011";
 	wait for CLOCK_PERIOD;
@@ -80,6 +82,14 @@ begin
 	wait for CLOCK_PERIOD;
 	assert (tb_alu_instr = "0111") report ("I-Type SLTI failed") severity failure;
 	wait for CLOCK_PERIOD;
+
+	--S-Type
+	tb_alu_op <= "11";
+	wait for CLOCK_PERIOD;
+	--sw x1, -x0F(x2)
+	tb_instr_in <= "11111110001000001001100010100011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = "0010") report ("S-Type failed") severity failure;
 	wait;
 
 end process test;
