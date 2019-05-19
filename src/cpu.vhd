@@ -94,6 +94,16 @@ architecture behaviour of cpu is
 		);
 	end component imm_gen;
 
+	component branch_cmp is
+		port (
+			alu_op : in std_logic_vector(1 downto 0);
+			instr_in : in std_logic_vector(31 downto 0);
+			rs1_data : in std_logic_vector(31 downto 0);
+			rs2_data : in std_logic_vector(31 downto 0);
+			branch : out std_logic
+		);
+	end component branch_cmp;
+
 	signal pc_en : std_logic;
 	signal pc_ld : std_logic;
 	signal pc_in : std_logic_vector(31 downto 0);
@@ -112,8 +122,9 @@ architecture behaviour of cpu is
 	signal alu_out : std_logic_vector(31 downto 0);
 	signal alu_z_flag : std_logic;
 	signal ram_out : std_logic_vector(31 downto 0);
-	signal cpu_alu_src_data : std_logic_vector(31 downto 0);
 	signal imm_gen_output : std_logic_vector(63 downto 0);
+	signal branch_cmp_branch : std_logic;
+	signal cpu_alu_src_data : std_logic_vector(31 downto 0);
 	signal cpu_alu_mem_out : std_logic_vector (31 downto 0);
 	signal cpu_branch_immediate : std_logic_vector (63 downto 0);
 begin
@@ -186,10 +197,19 @@ port map(
 	dout => ram_out
 	);
 
-immedaite_generate : imm_gen
+immedaite_generate: imm_gen
 port map(
 	instr_in => rom_instr(31 downto 0),
 	immediate_out => imm_gen_output
+	);
+
+branch_compare: branch_cmp
+port map(
+	alu_op => ctrl_alu_op,
+	instr_in => rom_instr(31 downto 0),
+	rs1_data => reg_r_data1,
+	rs2_data => reg_r_data2,
+	branch => branch_cmp_branch
 	);
 
 cpu_branch_immediate <= std_logic_vector(shift_left(unsigned(imm_gen_output), 1));
@@ -213,9 +233,9 @@ begin
 	end if;
 end process reg_write_src;
 
-pc_src: process(ctrl_branch, alu_z_flag, pc_out)
+pc_src: process(ctrl_branch, branch_cmp_branch, pc_out)
 begin
-	if(ctrl_branch = '1' and alu_z_flag = '1') then
+	if(ctrl_branch = '1' and branch_cmp_branch = '1') then
 		pc_en <= '0';
 		pc_ld <= '1';
 	else
