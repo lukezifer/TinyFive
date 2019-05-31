@@ -13,6 +13,7 @@ architecture behaviour of tb_ram is
 			addr : in std_logic_vector(7 downto 0);
 			r_en : in std_logic;
 			w_en : in std_logic;
+			funct3 : in std_logic_vector(2 downto 0);
 			din : in std_logic_vector(31 downto 0);
 			dout : out std_logic_vector(31 downto 0)
 		);
@@ -23,6 +24,7 @@ architecture behaviour of tb_ram is
 	signal tb_addr : std_logic_vector(7 downto 0);
 	signal tb_r_en : std_logic;
 	signal tb_w_en : std_logic;
+	signal tb_funct3 : std_logic_vector(2 downto 0);
 	signal tb_din  : std_logic_vector(31 downto 0);
 	signal tb_dout : std_logic_vector(31 downto 0);
 
@@ -33,6 +35,7 @@ port map(
 	addr => tb_addr,
 	r_en => tb_r_en,
 	w_en => tb_w_en,
+	funct3 => tb_funct3,
 	din  => tb_din,
 	dout => tb_dout
 );
@@ -50,44 +53,70 @@ begin
 	--Init, set inputs to zero
 	tb_r_en <= '0';
 	tb_w_en <= '0';
-	tb_addr <= "00000000";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000000";
 	tb_din <= x"00000000";
 	wait for CLOCK_PERIOD;
 	--Testcase 1, test RW
 	tb_r_en <= '0';
 	tb_w_en <= '1';
-	tb_addr <= "00000001";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000001";
 	tb_din <= x"00000001";
 	wait for CLOCK_PERIOD;
 	tb_r_en <= '1';
 	tb_w_en <= '0';
-	tb_addr <= "00000001";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000001";
 	wait for CLOCK_PERIOD;
 	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed" severity failure;
 	--Testcase 2, test simultan RW
 	tb_r_en <= '1';
 	tb_w_en <= '1';
-	tb_addr <= "00000010";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000010";
 	tb_din <= x"00000011";
 	wait for CLOCK_PERIOD;
 	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed" severity failure;
 	--Testcase 3, test async R
 	tb_r_en <= '1';
 	tb_w_en <= '1';
-	tb_addr <= "00000010";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000010";
 	tb_din <= x"00000011";
 	wait for CLOCK_PERIOD;
 	tb_r_en <= '0';
 	tb_w_en <= '1';
-	tb_addr <= "00000011";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000011";
 	tb_din <= x"00000111";
 	wait for CLOCK_PERIOD;
 	tb_w_en <= '1';
 	tb_r_en <= '0';
-	tb_addr <= "00000110";
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000110";
 	tb_din <= x"00001111";
 	wait for CLOCK_PERIOD;
 	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed" severity failure;
+	--Testcase 4, test sb, lb, lbu
+	tb_w_en <= '0';
+	tb_r_en <= '0';
+	tb_funct3 <= b"000";
+	tb_addr <= b"00000010";
+	tb_din <= x"FFFFFFFF";
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '1';
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '0';
+	tb_r_en <= '1';
+	wait for CLOCK_PERIOD;
+	tb_funct3 <= b"100";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = 16#000000FF#) report "Testcase 4 sb/lbu failed" severity failure;
+	wait for CLOCK_PERIOD;
+	tb_funct3 <= b"000";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = 16#FFFFFFFF#) report "Testcase 4 sb/lb failed" severity failure;
 	wait;
 end process test;
 
