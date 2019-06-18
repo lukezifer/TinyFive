@@ -47,18 +47,18 @@ package body utils is
 		for i in N'range loop
 			result(N'length - i) := to_char(N(i));
 		end loop;
-		return result;
+		return 'b' & result;
 	end function to_string;
 
 	function to_hex_string(N: std_logic_vector) return string is
 		variable fourbits : std_logic_vector(3 downto 0);
 		variable str_len : integer := hex_len(N);
-		variable result : string(0 to str_len);
+		variable result : string(1 to str_len);
 		variable lsb : integer := 0;
 		variable msb : integer := 0;
 		variable char : character;
 	begin
-		for idx in 0 to str_len loop 
+		for idx in 0 to str_len - 1 loop 
 			lsb := idx * 4;
 			msb := idx * 4 + 3;
 			if(msb >= N'length)
@@ -89,7 +89,7 @@ package body utils is
 			end case;
 			result(str_len - idx) := char;
 		end loop;
-		return result;
+		return 'x' & result;
 	end function to_hex_string;
 
 end utils;
