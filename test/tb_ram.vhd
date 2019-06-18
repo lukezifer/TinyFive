@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
+use work.utils.all;
 
 entity tb_ram is
 end tb_ram;
@@ -116,7 +117,7 @@ begin
 	wait for CLOCK_PERIOD;
 	tb_funct3 <= b"000";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#FFFFFFFF#) report "Testcase 4 sb/lb failed" severity failure;
+	assert(tb_dout(31 downto 0) = 16#FFFFFFFF#) report "Testcase 4 sb/lb failed, dout was "& to_string(tb_dout) severity failure;
 	wait;
 end process test;
 

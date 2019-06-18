@@ -6,6 +6,7 @@ use ieee.numeric_std.all;
 package utils is
 	function to_char(N: std_logic) return character;
 	function to_string(N : std_logic_vector) return string;
+	function to_hex_string(N: std_logic_vector) return string;
 end package utils;
 
 package body utils is
@@ -35,5 +36,12 @@ package body utils is
 		end loop;
 		return result;
 	end function to_string;
+
+	function to_hex_string(N: std_logic_vector) return string is
+		variable fourbits : std_logic_vector(4 downto 0);
+		variable result : string(1 to N'length);
+	begin
+		
+	end function to_hex_string;
 
 end utils;
