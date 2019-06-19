@@ -70,7 +70,7 @@ begin
 	tb_funct3 <= b"010";
 	tb_addr <= b"00000001";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed" severity failure;
+	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed, dout is " & to_hex_string(tb_dout) severity failure;
 	--Testcase 2, test simultan RW
 	tb_r_en <= '1';
 	tb_w_en <= '1';
@@ -78,7 +78,7 @@ begin
 	tb_addr <= b"00000010";
 	tb_din <= x"00000011";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed" severity failure;
+	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed, dout is " & to_hex_string(tb_dout) severity failure;
 	--Testcase 3, test async R
 	tb_r_en <= '1';
 	tb_w_en <= '1';
@@ -98,7 +98,7 @@ begin
 	tb_addr <= b"00000110";
 	tb_din <= x"00001111";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed" severity failure;
+	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed, dout is " & to_hex_string(tb_dout) severity failure;
 	--Testcase 4, test sb, lb, lbu
 	tb_w_en <= '0';
 	tb_r_en <= '0';
@@ -113,11 +113,45 @@ begin
 	wait for CLOCK_PERIOD;
 	tb_funct3 <= b"100";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#000000FF#) report "Testcase 4 sb/lbu failed" severity failure;
+	assert(tb_dout = x"000000FF") report "Testcase 4 sb/lbu failed, dout is " & to_hex_string(tb_dout) severity failure;
 	wait for CLOCK_PERIOD;
 	tb_funct3 <= b"000";
 	wait for CLOCK_PERIOD;
-	assert(tb_dout(31 downto 0) = 16#FFFFFFFF#) report "Testcase 4 sb/lb failed, dout was "& to_string(tb_dout) severity failure;
+	assert(tb_dout = x"FFFFFFFF") report "Testcase 4 sb/lb failed, dout is " & to_hex_string(tb_dout) severity failure;
+	--Testcase 5, test sh, lh, lhu
+	tb_w_en <= '0';
+	tb_r_en <= '0';
+	tb_funct3 <= b"001";
+	tb_addr <= b"00000011";
+	tb_din <= x"0000FFF0";
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '1';
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '0';
+	tb_r_en <= '1';
+	wait for CLOCK_PERIOD;
+	tb_funct3 <= b"101";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = x"0000FFF0") report "Testcase 5 sb/lhu failed, dout is " & to_hex_string(tb_dout) severity failure;
+	wait for CLOCK_PERIOD;
+	tb_funct3 <= b"000";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = x"FFFFFFF0") report "Testcase 5 sb/lh failed, dout is " & to_hex_string(tb_dout) severity failure;
+	--Testcase 6, test sw, lw
+	tb_w_en <= '0';
+	tb_r_en <= '0';
+	tb_funct3 <= b"010";
+	tb_addr <= b"00000111";
+	tb_din <= x"F0F0F0F0";
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '1';
+	wait for CLOCK_PERIOD;
+	tb_w_en <= '0';
+	tb_r_en <= '1';
+	wait for CLOCK_PERIOD;
+	tb_funct3 <= b"010";
+	wait for CLOCK_PERIOD;
+	assert(tb_dout = x"F0F0F0F0") report "Testcase 6 sw/lw failed, dout is " & to_hex_string(tb_dout) severity failure;
 	wait;
 end process test;
 

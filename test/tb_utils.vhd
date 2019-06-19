@@ -23,14 +23,14 @@ begin
 	test_vec_32bit <= x"F0F0F0F0";
 	wait for CLOCK_PERIOD;
 	assert (test_vec(0) = '1') report "test_vec(0) is " & to_char(test_vec(0)) severity failure;
-	assert(1 = 0) report "test_vec is " & to_string(test_vec) severity note;
-	assert(1 = 0) report "test_vec is " & to_hex_string(test_vec) severity note;
-	assert(1 = 0) report "test_vec_3bit is " & to_string(test_vec_3bit) severity note;
-	assert(1 = 0) report "test_vec_3bit is " & to_hex_string(test_vec_3bit) severity note;
-	assert(1 = 0) report "test_vec_9bit is " & to_string(test_vec_9bit) severity note;
-	assert(1 = 0) report "test_vec_9bit is " & to_hex_string(test_vec_9bit) severity note;
-	assert(1 = 0) report "test_vec_32bit is " & to_string(test_vec_32bit) severity note;
-	assert(1 = 0) report "test_vec_32bit is " & to_hex_string(test_vec_32bit) severity note;
+	report "test_vec is " & to_string(test_vec);
+	report "test_vec is " & to_hex_string(test_vec);
+	report "test_vec_3bit is " & to_string(test_vec_3bit);
+	report "test_vec_3bit is " & to_hex_string(test_vec_3bit);
+	report "test_vec_9bit is " & to_string(test_vec_9bit);
+	report "test_vec_9bit is " & to_hex_string(test_vec_9bit);
+	report "test_vec_32bit is " & to_string(test_vec_32bit);
+	report "test_vec_32bit is " & to_hex_string(test_vec_32bit);
 	wait;
 end process unit_test;
 

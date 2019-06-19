@@ -47,7 +47,7 @@ begin
 			case funct3 is
 				--lb
 				when b"000" =>
-					dout <= std_logic_vector(resize(signed(ram_out(7 downto 0)), ram_out'length));
+					dout <= std_logic_vector(resize(signed(ram_out(7 downto 0)), dout'length));
 				--lh
 				when b"001" =>
 					dout <= std_logic_vector(resize(signed(ram_out(15 downto 0)), ram_out'length));
