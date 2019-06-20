@@ -82,6 +82,7 @@ architecture behaviour of cpu is
 			addr : in std_logic_vector(7 downto 0);
 			r_en : in std_logic;
 			w_en : in std_logic;
+			funct3 : in std_logic_vector(2 downto 0);
 			din : in std_logic_vector(31 downto 0);
 			dout : out std_logic_vector(31 downto 0)
 		);
@@ -193,6 +194,7 @@ port map(
 	addr => alu_out(7 downto 0),
 	r_en => ctrl_mem_read,
 	w_en => ctrl_mem_write,
+	funct3 => rom_instr(14 downto 12),
 	din => reg_r_data2,
 	dout => ram_out
 	);
