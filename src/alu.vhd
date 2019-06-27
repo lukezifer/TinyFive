@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
+use work.types.all;
 
 entity alu is
 port(
@@ -45,7 +46,7 @@ begin
 			when others =>
 				output <= x"00000000";
 		end case;
-		
+
 	end process calculate;
 
 	zero: process(output)

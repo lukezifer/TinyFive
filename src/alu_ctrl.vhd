@@ -38,6 +38,21 @@ begin
 				--AND
 				elsif funct3 = "111" and funct7 = '0' then
 					alu_instr <= "0000";
+				--SLT
+				elsif funct3 = "010" and funct7 = '0' then
+					alu_instr <= "1111"; -- slt alu instr
+				--SLTU
+				elsif funct3 = "011" and funct7 = '0' then
+					alu_instr <= "1111"; --sltu alu instr
+				--SLL
+				elsif funct3 = "001" and funct7 = '0' then
+					alu_instr <= "1111"; --sll alu instr
+				--SRL
+				elsif funct3 = "101" and funct7 = '0' then
+					alu_instr <= "1111"; --srl alu instr
+				--SRA
+				elsif funct3 = "101" and funct7 = '1' then
+					alu_instr <= "1111"; --sra alu instr
 				else
 					alu_instr <= "1111";
 				end if;
