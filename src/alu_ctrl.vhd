@@ -6,7 +6,7 @@ use work.types.all;
 
 entity alu_ctrl is
 port(
-	alu_op	 : in  std_logic_vector(1 downto 0);
+	alu_op	 : in  ALU_OP_ENUM;
 	instr_in : in  std_logic_vector(31 downto 0);
 	alu_instr: out ALU_INSTR_ENUM
 );
@@ -23,7 +23,7 @@ begin
 	begin
 		case alu_op is
 		--R-Type
-			when "10" =>
+			when ALU_OP_R =>
 				--ADD
 				if funct3 = "000" and funct7 = '0' then
 					alu_instr <= ALU_INSTR_ADD;
@@ -58,7 +58,7 @@ begin
 					alu_instr <= ALU_INSTR_ZERO;
 				end if;
 		--I-Type
-			when "00" =>
+			when ALU_OP_I =>
 				--addi, lb
 				if funct3 = "000" then
 					alu_instr <= ALU_INSTR_ADD;
@@ -75,7 +75,7 @@ begin
 					alu_instr <= ALU_INSTR_ZERO;
 				end if;
 		--S-Type
-			when "11" =>
+			when ALU_OP_S =>
 				alu_instr <= ALU_INSTR_ADD;
 		--default
 			when others =>
