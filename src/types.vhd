@@ -4,11 +4,13 @@ use ieee.std_logic_1164.all;
 package types is
 	type ALU_INSTR_ENUM is 
 	(
+		ALU_INSTR_ZERO,
 		ALU_INSTR_ADD,
 		ALU_INSTR_SUB,
 		ALU_INSTR_SLL,
 		ALU_INSTR_SLT,
 		ALU_INSTR_SLTU,
+		ALU_INSTR_XOR,
 		ALU_INSTR_SRL,
 		ALU_INSTR_SRA,
 		ALU_INSTR_OR,

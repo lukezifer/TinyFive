@@ -6,7 +6,7 @@ use work.types.all;
 
 entity alu is
 port(
-	oper	: in  std_logic_vector(3 downto 0);
+	oper	: in  ALU_INSTR_ENUM;
 	a_in	: in  std_logic_vector(31 downto 0);
 	b_in	: in  std_logic_vector(31 downto 0);
 	c_out	: out std_logic_vector(31 downto 0);
@@ -21,22 +21,22 @@ begin
 	begin
 		case oper is
 			--AND
-			when "0000" =>
+			when ALU_INSTR_AND =>
 				output <= a_in and b_in;
 			--OR
-			when "0001" =>
+			when ALU_INSTR_OR =>
 				output <= a_in or b_in;
 			--XOR
-			when "0011" =>
+			when ALU_INSTR_XOR =>
 				output <= a_in xor b_in;
 			--ADD
-			when "0010" =>
+			when ALU_INSTR_ADD =>
 				output <= std_logic_vector(signed(a_in) + signed(b_in));
 			--SUB
-			when "0110" =>
+			when ALU_INSTR_SUB =>
 				output <= a_in - b_in;
 			--SLT
-			when "0111" =>
+			when ALU_INSTR_SLT =>
 				if(signed(a_in) < signed(b_in)) then
 					output <= x"00000001";
 				else
