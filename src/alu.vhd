@@ -6,7 +6,7 @@ use work.types.all;
 
 entity alu is
 port(
-	oper	: in  ALU_INSTR_ENUM;
+	instr	: in  ALU_INSTR_ENUM;
 	a_in	: in  std_logic_vector(31 downto 0);
 	b_in	: in  std_logic_vector(31 downto 0);
 	c_out	: out std_logic_vector(31 downto 0);
@@ -17,9 +17,9 @@ end entity alu;
 architecture behaviour of alu is
 	signal output : std_logic_vector(31 downto 0);
 begin
-	calculate: process(oper, a_in, b_in)
+	calculate: process(instr, a_in, b_in)
 	begin
-		case oper is
+		case instr is
 			--AND
 			when ALU_INSTR_AND =>
 				output <= a_in and b_in;
