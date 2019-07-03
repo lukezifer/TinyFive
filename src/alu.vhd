@@ -15,49 +15,48 @@ port(
 end entity alu;
 
 architecture behaviour of alu is
-	signal output : std_logic_vector(31 downto 0);
 begin
 	calculate: process(instr, a_in, b_in)
+	variable output : std_logic_vector(31 downto 0) := x"00000000";
+	variable zero : std_logic := '0';
 	begin
 		case instr is
 			--AND
 			when ALU_INSTR_AND =>
-				output <= a_in and b_in;
+				output := a_in and b_in;
 			--OR
 			when ALU_INSTR_OR =>
-				output <= a_in or b_in;
+				output := a_in or b_in;
 			--XOR
 			when ALU_INSTR_XOR =>
-				output <= a_in xor b_in;
+				output := a_in xor b_in;
 			--ADD
 			when ALU_INSTR_ADD =>
-				output <= std_logic_vector(signed(a_in) + signed(b_in));
+				output := std_logic_vector(signed(a_in) + signed(b_in));
 			--SUB
 			when ALU_INSTR_SUB =>
-				output <= a_in - b_in;
+				output := a_in - b_in;
 			--SLT
 			when ALU_INSTR_SLT =>
 				if(signed(a_in) < signed(b_in)) then
-					output <= x"00000001";
+					output := x"00000001";
 				else
-					output <= x"00000000";
+					output := x"00000000";
 				end if;
 			--default
 			when others =>
-				output <= x"00000000";
+				output := x"00000000";
 		end case;
 
-	end process calculate;
-
-	zero: process(output)
-	begin
 		if (output = 0) then
-			z_flag <= '1';
+			zero := '1';
 		else
-			z_flag <= '0';
+			zero := '0';
 		end if;
-	end process zero;
 
 	c_out <= output;
+	z_flag <= zero;
+	end process calculate;
+
 
 end architecture behaviour;
