@@ -21,21 +21,18 @@ begin
 	variable zero : std_logic := '0';
 	begin
 		case instr is
+			--ADD
+			when ALU_INSTR_ADD =>
+				output := std_logic_vector(signed(a_in) + signed(b_in));
 			--AND
 			when ALU_INSTR_AND =>
 				output := a_in and b_in;
 			--OR
 			when ALU_INSTR_OR =>
 				output := a_in or b_in;
-			--XOR
-			when ALU_INSTR_XOR =>
-				output := a_in xor b_in;
-			--ADD
-			when ALU_INSTR_ADD =>
-				output := std_logic_vector(signed(a_in) + signed(b_in));
-			--SUB
-			when ALU_INSTR_SUB =>
-				output := a_in - b_in;
+			--SLL
+			when ALU_INSTR_SLL =>
+				output := std_logic_vector(shift_left(unsigned(a_in), to_integer(unsigned(b_in(4 downto 0)))));
 			--SLT
 			when ALU_INSTR_SLT =>
 				if(signed(a_in) < signed(b_in)) then
@@ -43,6 +40,25 @@ begin
 				else
 					output := x"00000000";
 				end if;
+			--SLTU
+			when ALU_INSTR_SLTU =>
+				if(unsigned(a_in) < unsigned(b_in)) then
+					output := x"00000001";
+				else
+					output := x"00000000";
+				end if;
+			--SRA
+			when ALU_INSTR_SRA =>
+				output := std_logic_vector(shift_right(signed(a_in), to_integer(unsigned(b_in(4 downto 0)))));
+			--SRL
+			when ALU_INSTR_SRL =>
+				output := std_logic_vector(shift_right(unsigned(a_in), to_integer(unsigned(b_in(4 downto 0)))));
+			--SUB
+			when ALU_INSTR_SUB =>
+				output := a_in - b_in;
+			--XOR
+			when ALU_INSTR_XOR =>
+				output := a_in xor b_in;
 			--default
 			when others =>
 				output := x"00000000";

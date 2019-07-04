@@ -92,11 +92,11 @@ begin
 	tb_a_in <= x"00000001";
 	tb_b_in <= x"00000001";
 	wait on tb_c_out, tb_z_flag for CLOCK_PERIOD;
-	assert(tb_c_out = 16#3# and tb_z_flag = '0') report "SLL Testcase 1 failed" severity failure;
+	assert(tb_c_out = 16#2# and tb_z_flag = '0') report "SLL Testcase 1 failed" severity failure;
 	--SLL Testcase 2
 	tb_instr <= ALU_INSTR_SLL;
-	tb_a_in <= x"FFFFFFFF";
-	tb_b_in <= x"000000F0";
+	tb_a_in <= x"FFFFFFFE";
+	tb_b_in <= x"0000001F";
 	wait on tb_c_out, tb_z_flag for CLOCK_PERIOD;
 	assert(tb_c_out = 0 and tb_z_flag = '1') report "SLL Testcase 2 failed" severity failure;
 	--SLT Testcase 1
@@ -132,7 +132,7 @@ begin
 	tb_a_in <= x"F0000001";
 	tb_b_in <= x"00000001";
 	wait on tb_c_out, tb_z_flag for CLOCK_PERIOD;
-	assert(tb_c_out = 16#F8000000# and tb_z_flag = '0') report "SRA Testcase 1 failed" severity failure;
+	assert(tb_c_out = x"F8000000" and tb_z_flag = '0') report "SRA Testcase 1 failed" severity failure;
 	--SRA Testcase 2
 	tb_instr <= ALU_INSTR_SRA;
 	tb_a_in <= x"00000001";
@@ -148,8 +148,8 @@ begin
 	wait for CLOCK_PERIOD;
 	--SRL Testcase 2
 	tb_instr <= ALU_INSTR_SRL;
-	tb_a_in <= x"FFFFFFFF";
-	tb_b_in <= x"000000F0";
+	tb_a_in <= x"7FFFFFFF";
+	tb_b_in <= x"0000001F";
 	wait on tb_c_out, tb_z_flag for CLOCK_PERIOD;
 	assert(tb_c_out = 0 and tb_z_flag = '1') report "SRL Testcase 2 failed" severity failure;
 	wait for CLOCK_PERIOD;
