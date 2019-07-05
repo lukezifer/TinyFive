@@ -62,26 +62,53 @@ begin
 
 	--I-Type
 	tb_alu_op <= ALU_OP_I;
+	-- immediate - rs1 - funct3 - rd - opcode
 	wait for CLOCK_PERIOD;
 	--addi 2, 1, 10
-	tb_instr_in <= "00000000101000001000000100010011";
+	tb_instr_in <= b"000000001010_00001_000_00010_0010011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_ADD) report ("I-Type ADDI failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_ADD) report "I-Type ADDI failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--andi 2, 1, 10
-	tb_instr_in <= "00000000101000001111000100010011";
+	tb_instr_in <= b"000000001010_00001_111_00010_0010011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_AND) report ("I-Type ANDI failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_AND) report "I-Type ANDI failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--ori 2, 1, 10
-	tb_instr_in <= "00000000101000001110000100010011";
+	tb_instr_in <= b"000000001010_00001_110_00010_0010011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_OR) report ("I-Type ORI failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_OR) report "I-Type ORI failed" severity failure;
 	wait for CLOCK_PERIOD;
 	--slti 2, 1, 10
-	tb_instr_in <= "00000000101000001010000100010011";
+	tb_instr_in <= b"000000001010_00001_010_00010_0010011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_SLT) report ("I-Type SLTI failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_SLT) report "I-Type SLTI failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--sltiu 2, 1, 10
+	tb_instr_in <= b"000000001010_00001_011_00010_0010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SLTU) report "I-Type SLTIU failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--xori 2, 1, 10
+	tb_instr_in <= b"000000001010_00001_100_00010_0010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_XOR) report "I-Type XORI failed" severity failure;
+	wait for CLOCK_PERIOD;
+	-- funct7 - shamt - rs1 - funct3 - rd - opcode
+	--slli 2, 1, 10
+	tb_instr_in <= b"0000000_01010_00001_001_00001_0010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SLL) report "I-Type SLLI failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--srli 2, 1, 10
+	tb_instr_in <= b"0000000_01010_00001_101_00001_0010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SRL) report "I-Type SRLI failed" severity failure;
+	wait for CLOCK_PERIOD;
+	--srai 2, 1, 10
+	tb_instr_in <= b"0100000_01010_00001_101_00001_0010011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SRA) report "I-Type SRAI failed" severity failure;
 	wait for CLOCK_PERIOD;
 
 	--S-Type

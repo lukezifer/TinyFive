@@ -59,16 +59,31 @@ begin
 				end if;
 		--I-Type
 			when ALU_OP_I =>
-				--addi, lb
+				--ADDI, lb
 				if funct3 = "000" then
 					alu_instr <= ALU_INSTR_ADD;
-				--slti
+				--SLLI
+				elsif funct3 = "001" and funct7 = '0' then
+					alu_instr <= ALU_INSTR_SLL;
+				--SLTI
 				elsif funct3 = "010" then
 					alu_instr <= ALU_INSTR_SLT;
-				--ori
+				--SLTUI
+				elsif funct3 = "011" then
+					alu_instr <= ALU_INSTR_SLTU;
+				--XORI
+				elsif funct3 = "100" then
+					alu_instr <= ALU_INSTR_XOR;
+				--SRLI
+				elsif funct3 = "101" and funct7 = '0' then
+					alu_instr <= ALU_INSTR_SRL;
+				--SRAI
+				elsif funct3 = "101" and funct7 = '1' then
+					alu_instr <= ALU_INSTR_SRA;
+				--ORI
 				elsif funct3 = "110" then
 					alu_instr <= ALU_INSTR_OR;
-				--andi
+				--ANDI
 				elsif funct3 = "111" then
 					alu_instr <= ALU_INSTR_AND;
 				else
