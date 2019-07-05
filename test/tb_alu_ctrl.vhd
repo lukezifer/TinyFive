@@ -34,30 +34,52 @@ begin
 	--initialization
 	tb_alu_op <= ALU_OP_S;
 	--nop
-	tb_instr_in <= "00000000000000000000000000110111";
+	tb_instr_in <= b"00000000000_00000_000_00000_00110111";
 	wait for CLOCK_PERIOD;
 	--R-Type
 	tb_alu_op <= ALU_OP_R;
+	-- funct7 - rs2 - rs1 - funct3 - rd - opcode
+	wait for CLOCK_PERIOD;
 	--add 10, 1, 2
-	tb_instr_in <= "00000000001000001000010100110011";
+	tb_instr_in <= b"0000000_00010_00001_000_01010_0110011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_ADD) report ("R-Type ADD failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_ADD) report "R-Type ADD failed" severity failure;
 	--sub 10, 1, 2
-	tb_instr_in <= "01000000001000001000010100110011";
+	tb_instr_in <= b"0100000_00010_00001_000_01010_0110011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_SUB) report ("R-Type SUB failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_SUB) report "R-Type SUB failed" severity failure;
+	--sll 10, 1, 2
+	tb_instr_in <= b"0000000_00010_00001_001_01010_0110011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SLL) report "R-Type SLL failed" severity failure;
 	--slt 10, 1, 2
-	tb_instr_in <= "00000000001000001010010100110011";
+	tb_instr_in <= b"0000000_00010_00001_010_01010_0110011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_SLT) report ("R-Type SLT failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_SLT) report "R-Type SLT failed" severity failure;
+	--sltu 10, 1, 2
+	tb_instr_in <= b"0000000_00010_00001_011_01010_0110011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SLTU) report "R-Type SLTU failed" severity failure;
+	--xor 10, 1, 2
+	tb_instr_in <= b"0000000_00010_00001_100_01010_0110011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_XOR) report "R-Type XOR failed" severity failure;
+	--srl 10, 1, 2
+	tb_instr_in <= b"0000000_00010_00001_101_01010_0110011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SRL) report "R-Type SRL failed" severity failure;
+	--sra 10, 1, 2
+	tb_instr_in <= b"0100000_00010_00001_101_01010_0110011";
+	wait for CLOCK_PERIOD;
+	assert (tb_alu_instr = ALU_INSTR_SRA) report "R-Type SRA failed" severity failure;
 	--or 10, 1, 2
-	tb_instr_in <= "00000000001000001110010100110011";
+	tb_instr_in <= b"0000000_00010_00001_110_01010_0110011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_OR) report ("R-Type OR failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_OR) report "R-Type OR failed" severity failure;
 	--and 10, 1, 2
-	tb_instr_in <= "00000000001000001111010100110011";
+	tb_instr_in <= b"0000000_00010_00001_111_01010_0110011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_AND) report ("R-Type AND failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_AND) report "R-Type AND failed" severity failure;
 	wait for CLOCK_PERIOD;
 
 	--I-Type
