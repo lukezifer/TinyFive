@@ -135,11 +135,12 @@ begin
 
 	--S-Type
 	tb_alu_op <= ALU_OP_S;
+	-- immediate - rs2 - rs1 - funct3 - immediate - opcode
 	wait for CLOCK_PERIOD;
-	--sw x1, -x0F(x2)
-	tb_instr_in <= "11111110001000001001100010100011";
+	--sw 2, 10(1)
+	tb_instr_in <= b"0000000_00010_00001_010_01010_0100011";
 	wait for CLOCK_PERIOD;
-	assert (tb_alu_instr = ALU_INSTR_ADD) report ("S-Type failed") severity failure;
+	assert (tb_alu_instr = ALU_INSTR_ADD) report "S-Type failed" severity failure;
 	wait;
 
 end process test;
