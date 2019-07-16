@@ -1,108 +1,71 @@
-GHDL   := ghdl
-SIM    := gtkwave
+GHDL := ghdl
+SIM := gtkwave
 SRCDIR := src
 TESTDIR := test
 SYNDIR := syn
 
 TOP := cpu
+PKGS := utils types
+
 EXTRAFLAGS := --workdir=$(SYNDIR) --ieee=synopsys --std=93c -fexplicit
+
+Q := @
+
 ## Variable STOPTIME: set --stop-time, e.g. 100ns
 STOPTIME ?= 500ns
 
-Q := 
-
-LIBS := utils types
-
-vhdlfiles := $(shell find $(SRCDIR)/ -name "*.vhd")
-entities := $(patsubst $(SRCDIR)/%.vhd, %, $(vhdlfiles))
-analysis_top_target := $(addprefix analysis., $(TOP))
-analysis_target := $(addprefix analysis., $(filter-out $(TOP), $(entities)))
-eleborate_top_target := $(addprefix eleborate., $(TOP))
-eleborate_target := $(addprefix eleborate., $(filter-out $(TOP), $(entities)))
-
-testfiles := $(shell find $(TESTDIR)/ -name "*.vhd")
-tb_entities := $(patsubst $(TESTDIR)/%.vhd, %, $(testfiles))
-tb_top_entity := $(addprefix tb_, $(TOP))
-tb_analysis_top_target := $(addprefix tb_analysis., $(tb_top_entity))
-tb_analysis_target := $(addprefix tb_analysis., $(tb_entities))
-tb_eleborate_target := $(addprefix tb_eleborate., $(tb_entities))
-tb_eleborate_top_target := $(addprefix tb_eleborate., $(tb_top_entity))
-
 src_files := $(shell find $(SRCDIR)/ -name "*.vhd")
 top_file := $(SRCDIR)/$(TOP).vhd
-lib_files := $(patsubst %, $(SRCDIR)/%.vhd, $(LIBS))
-component_files := $(filter-out $(lib_files), $(filter-out $(top_file), $(src_files)))
+pkg_files := $(patsubst %, $(SRCDIR)/%.vhd, $(PKGS))
+component_files := $(filter-out $(pkg_files), $(filter-out $(top_file), $(src_files)))
 
 top_entity := $(TOP)
-lib_entities := $(patsubst $(SRCDIR)/%.vhd, %, $(lib_files))
+pkg_entities := $(patsubst $(SRCDIR)/%.vhd, %, $(pkg_files))
 component_entities := $(patsubst $(SRCDIR)/%.vhd, %, $(component_files))
 
-.PHONY: all sim clean analysis eleborate run tb_analysis tb_eleborate test
-## all: run TOP testbench
-all: analysis tb_analysis tb_eleborate run
+.PHONY: all sim clean test unittest help
 
-analysis: $(analysis_target) $(analysis_top_target)
+## all: run TOP entity testbench
+all: $(top_entity)
 
-tb_analysis: $(tb_analysis_top_target)
+## unittest: run all PKGS and COMPONENT entity testbenches
+unittest: $(pkg_entities) $(component_entities) 
 
-eleborate: $(eleborate_top_target)
+## test: run all tests, PKG, COMPONENT and TOP entity testbenches
+test: $(pkg_entities) $(component_entities) $(top_entity)
 
-tb_eleborate: $(tb_eleborate_top_target)
+## TOP: run TOP entity testbench
+$(top_entity): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(pkg_files) $(component_files) $^
+	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
+	@echo "Start Running tb_$@"
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
+	@echo -e "Stop Running tb_$@\n"
 
-#run_%: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+## COMPONENT: run COMPONENT entity testbench
+$(component_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(pkg_files) $^
+	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
+	@echo "Start Running tb_$@"
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
+	@echo -e "Stop Running tb_$@\n"
 
-%: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
-	mkdir -p $(SYNDIR)
+## PKG: run PKG entity testbench
+$(pkg_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $^
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
+	@echo "Start Running tb_$@"
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
+	@echo -e "Stop Running tb_$@\n"
 
-run_%: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
-	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$* --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
-
-tb_eleborate.%: $(TESTDIR)/%.vhd
-	$(Q)$(GHDL) -e $(EXTRAFLAGS) $*
-
-tb_analysis.%: $(TESTDIR)/%.vhd
-	mkdir -p $(SYNDIR)
-	$(Q)$(GHDL) -a $(EXTRAFLAGS) $<
-
-eleborate.%: $(SRCDIR)/%.vhd
-	$(Q)$(GHDL) -e $(EXTRAFLAGS) $*
-
-analysis.%: $(SRCDIR)/%.vhd
-	mkdir -p $(SYNDIR)
-	$(Q)$(GHDL) -a $(EXTRAFLAGS) $<
-
-run:
-	$(Q)$(GHDL) -r $(EXTRAFLAGS) $(tb_top_entity) --stop-time=$(STOPTIME) --vcd=$(SYNDIR)/$(tb_top_entity).vcd
-
-sim: run
+## sim: run simulation of the TOP entity testbench
+sim: $(top_entity)
 	$(Q)$(SIM) $(SYNDIR)/$(TOP).vcd
 
+## clean: delete SYNDIR
 clean:
 	$(RM) -r $(SYNDIR)/*
 
+## help: show this help
 help: Makefile
 	@sed -n 's/^##//p' $<
-test: $(component_entities) $(lib_entities)
-
-$(top_entity): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
-	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(lib_files) $(component_files) $^
-	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
-	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
-
-$(component_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
-	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(lib_files) $^
-	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
-	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
-
-$(lib_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
-	$(Q)$(GHDL) -a $(EXTRAFLAGS) $^
-	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
-	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
-
-
-
-
-
-
