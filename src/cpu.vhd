@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
+use work.types.all;
 
 entity cpu is
 port(
@@ -51,7 +52,7 @@ architecture behaviour of cpu is
 			branch : out std_logic;
 			mem_read : out std_logic;
 			mem_to_reg : out std_logic;
-			alu_op : out std_logic_vector(1 downto 0);
+			alu_op : out ALU_OP_ENUM;
 			mem_write : out std_logic;
 			alu_src : out std_logic;
 			reg_write : out std_logic
@@ -60,15 +61,15 @@ architecture behaviour of cpu is
 
 	component alu_ctrl is
 		port (
-			alu_op : in std_logic_vector(1 downto 0);
+			alu_op : in ALU_OP_ENUM;
 			instr_in : in std_logic_vector(31 downto 0);
-			alu_instr : out std_logic_vector(3 downto 0)
+			alu_instr : out ALU_INSTR_ENUM
 	);
 	end component alu_ctrl;
 
 	component alu is
 		port (
-			oper : in std_logic_vector(3 downto 0);
+			instr : in ALU_INSTR_ENUM;
 			a_in : in std_logic_vector(31 downto 0);
 			b_in : in std_logic_vector(31 downto 0);
 			c_out : out std_logic_vector(31 downto 0);
@@ -97,7 +98,7 @@ architecture behaviour of cpu is
 
 	component branch_cmp is
 		port (
-			alu_op : in std_logic_vector(1 downto 0);
+			alu_op : in ALU_OP_ENUM;
 			instr_in : in std_logic_vector(31 downto 0);
 			rs1_data : in std_logic_vector(31 downto 0);
 			rs2_data : in std_logic_vector(31 downto 0);
@@ -118,8 +119,8 @@ architecture behaviour of cpu is
 	signal ctrl_mem_write : std_logic;
 	signal ctrl_alu_src : std_logic;
 	signal ctrl_reg_write : std_logic;
-	signal ctrl_alu_op : std_logic_vector(1 downto 0);
-	signal alu_ctrl_alu_instr : std_logic_vector(3 downto 0);
+	signal ctrl_alu_op : ALU_OP_ENUM;
+	signal alu_ctrl_alu_instr : ALU_INSTR_ENUM;
 	signal alu_out : std_logic_vector(31 downto 0);
 	signal alu_z_flag : std_logic;
 	signal ram_out : std_logic_vector(31 downto 0);
@@ -181,7 +182,7 @@ port map(
 
 arithmetic_logic_unit: alu
 port map(
-	oper => alu_ctrl_alu_instr,
+	instr => alu_ctrl_alu_instr,
 	a_in => reg_r_data1,
 	b_in => cpu_alu_src_data,
 	c_out => alu_out,
