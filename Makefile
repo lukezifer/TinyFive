@@ -11,6 +11,8 @@ STOPTIME ?= 500ns
 
 Q := 
 
+LIBS := utils types
+
 vhdlfiles := $(shell find $(SRCDIR)/ -name "*.vhd")
 entities := $(patsubst $(SRCDIR)/%.vhd, %, $(vhdlfiles))
 analysis_top_target := $(addprefix analysis., $(TOP))
@@ -26,7 +28,16 @@ tb_analysis_target := $(addprefix tb_analysis., $(tb_entities))
 tb_eleborate_target := $(addprefix tb_eleborate., $(tb_entities))
 tb_eleborate_top_target := $(addprefix tb_eleborate., $(tb_top_entity))
 
-.PHONY: all sim clean analysis eleborate run tb_analysis tb_eleborate
+src_files := $(shell find $(SRCDIR)/ -name "*.vhd")
+top_file := $(SRCDIR)/$(TOP).vhd
+lib_files := $(patsubst %, $(SRCDIR)/%.vhd, $(LIBS))
+component_files := $(filter-out $(lib_files), $(filter-out $(top_file), $(src_files)))
+
+top_entity := $(TOP)
+lib_entities := $(patsubst $(SRCDIR)/%.vhd, %, $(lib_files))
+component_entities := $(patsubst $(SRCDIR)/%.vhd, %, $(component_files))
+
+.PHONY: all sim clean analysis eleborate run tb_analysis tb_eleborate test
 ## all: run TOP testbench
 all: analysis tb_analysis tb_eleborate run
 
@@ -73,3 +84,25 @@ clean:
 
 help: Makefile
 	@sed -n 's/^##//p' $<
+test: $(component_entities) $(lib_entities)
+
+$(top_entity): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(lib_files) $(component_files) $^
+	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
+
+$(component_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(lib_files) $^
+	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
+
+$(lib_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	$(Q)$(GHDL) -a $(EXTRAFLAGS) $^
+	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
+	$(Q)$(GHDL) -r $(EXTRAFLAGS) tb_$@ --stop-time=$(STOPTIME) --wave=$(SYNDIR)/tb_$*.ghw
+
+
+
+
+
+
