@@ -21,7 +21,8 @@ package types is
 	(
 		ALU_OP_I,
 		ALU_OP_R,
-		ALU_OP_S
+		ALU_OP_S,
+		ALU_OP_B
 	);
 
 end package types;

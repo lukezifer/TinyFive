@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
+use work.types.all;
 
 entity tb_branch_cmp is
 end entity tb_branch_cmp;
@@ -9,7 +10,7 @@ end entity tb_branch_cmp;
 architecture behaviour of tb_branch_cmp is
 	component branch_cmp is
 		port(
-			alu_op : in std_logic_vector(1 downto 0);
+			alu_op : in ALU_OP_ENUM;
 			instr_in : in std_logic_vector(31 downto 0);
 			rs1_data : in std_logic_vector(31 downto 0);
 			rs2_data : in std_logic_vector(31 downto 0);
@@ -17,7 +18,7 @@ architecture behaviour of tb_branch_cmp is
 		);
 	end component branch_cmp;
 	Constant CLOCK_PERIOD : time := 10 ns;
-	signal tb_alu_op : std_logic_vector(1 downto 0);
+	signal tb_alu_op : ALU_OP_ENUM;
 	signal tb_instr_in : std_logic_vector(31 downto 0);
 	signal tb_rs1_data : std_logic_vector(31 downto 0);
 	signal tb_rs2_data : std_logic_vector(31 downto 0);
@@ -36,14 +37,14 @@ port map(
 test: process
 begin
 	--initialization
-	tb_alu_op <= "00";
+	tb_alu_op <= ALU_OP_R;
 	--nop
 	tb_instr_in <= "00000000000000000000000000110111";
 	tb_rs1_data <= x"00000000";
 	tb_rs2_data <= x"00000000";
 	wait for CLOCK_PERIOD;
 	assert (tb_branch = '0') report ("Default Testcase failed") severity failure;
-	tb_alu_op <= "01";
+	tb_alu_op <= ALU_OP_B;
 	--beq 0x2, 0x1, 0x0
 	tb_instr_in <= "00000000000100010000000001100011";
 	tb_rs1_data <= x"00000000";

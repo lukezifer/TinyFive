@@ -2,10 +2,11 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
+use work.types.all;
 
 entity branch_cmp is
 port(
-	alu_op : in std_logic_vector(1 downto 0);
+	alu_op : in ALU_OP_ENUM;
 	instr_in : in std_logic_vector(31 downto 0);
 	rs1_data : in std_logic_vector(31 downto 0);
 	rs2_data : in std_logic_vector(31 downto 0);
@@ -20,7 +21,7 @@ begin
 
 	compare: process(alu_op, funct3, rs1_data, rs2_data)
 	begin
-		if alu_op = "01" then
+		if alu_op = ALU_OP_B then
 			case funct3 is
 			--beq 000
 				when "000" =>

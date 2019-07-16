@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
+use work.types.all;
 
 entity ctrl is
 port(
@@ -9,7 +10,7 @@ port(
 	branch	: out	std_logic;
 	mem_read	: out	std_logic;
 	mem_to_reg	: out	std_logic;
-	alu_op	: out	std_logic_vector(1 downto 0);
+	alu_op	: out	ALU_OP_ENUM;
 	mem_write	: out std_logic;
 	alu_src		: out std_logic;
 	reg_write	: out std_logic
@@ -27,7 +28,7 @@ begin
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= "10";
+				alu_op <= ALU_OP_R;
 				mem_write <= '0';
 				alu_src <= '0';
 				reg_write <= '1';
@@ -36,7 +37,7 @@ begin
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= "00";
+				alu_op <= ALU_OP_I;
 				mem_write <= '0';
 				alu_src <= '1';
 				reg_write <= '1';
@@ -45,7 +46,7 @@ begin
 				branch <= '1';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= "01";
+				alu_op <= ALU_OP_B;
 				mem_write <= '0';
 				alu_src <= '0';
 				reg_write <= '0';
@@ -54,7 +55,7 @@ begin
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= "11";
+				alu_op <= ALU_OP_S;
 				mem_write <= '1';
 				alu_src <= '1';
 				reg_write <= '0';
@@ -63,7 +64,7 @@ begin
 				branch <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= "10";
+				alu_op <= ALU_OP_R;
 				mem_write <= '0';
 				alu_src <= '0';
 				reg_write <= '1';
