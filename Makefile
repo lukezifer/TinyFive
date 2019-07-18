@@ -60,7 +60,7 @@ $(pkg_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
 
 ## sim: run simulation of the TOP entity testbench
 sim: $(top_entity)
-	$(Q)$(SIM) $(SYNDIR)/$(TOP).vcd
+	$(Q)$(SIM) $(SYNDIR)/tb_$(TOP).ghw $(TESTDIR)/tb_$(TOP).gtkw
 
 ## clean: delete SYNDIR
 clean:
