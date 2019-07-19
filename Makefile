@@ -36,6 +36,7 @@ test: $(pkg_entities) $(component_entities) $(top_entity)
 
 ## TOP: run TOP entity testbench
 $(top_entity): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	mkdir -p $(SYNDIR)
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(pkg_files) $(component_files) $^
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
 	@echo "Start Running tb_$@"
@@ -44,6 +45,7 @@ $(top_entity): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
 
 ## COMPONENT: run COMPONENT entity testbench
 $(component_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	mkdir -p $(SYNDIR)
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $(pkg_files) $^
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
 	@echo "Start Running tb_$@"
@@ -52,6 +54,7 @@ $(component_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
 
 ## PKG: run PKG entity testbench
 $(pkg_entities): %: $(SRCDIR)/%.vhd $(TESTDIR)/tb_%.vhd
+	mkdir -p $(SYNDIR)
 	$(Q)$(GHDL) -a $(EXTRAFLAGS) $^
 	$(Q)$(GHDL) -e $(EXTRAFLAGS) tb_$@
 	@echo "Start Running tb_$@"
