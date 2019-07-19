@@ -15,9 +15,6 @@ install:
     - sudo ldconfig
     - cd ..
 
-before_script:
-    - cd /home/travis/Lukeekul/TinyFive
-
 script:
     - make test
 
