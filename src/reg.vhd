@@ -35,4 +35,10 @@ begin
 		end if;
 	end process write_data;
 
+	read_data: process(r_addr1, r_addr2, register_set)
+	begin
+		r_data1 <= register_set(to_integer(unsigned(r_addr1)));
+		r_data2 <= register_set(to_integer(unsigned(r_addr2)));
+	end process read_data;
+
 end architecture behaviour;
