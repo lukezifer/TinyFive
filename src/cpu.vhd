@@ -144,7 +144,7 @@ port map(
 read_only_memory: rom
 port map(
 	clk => clk,
-	addr => pc_out(7 downto 0),
+	addr => pc_out(9 downto 2),
 	dout => rom_instr
 	);
 
