@@ -67,7 +67,7 @@ begin
 				alu_op <= ALU_OP_R;
 				mem_write <= '0';
 				alu_src <= '0';
-				reg_write <= '1';
+				reg_write <= '0';
 		end case;
 	end process decode;
 
