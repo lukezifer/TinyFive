@@ -1,12 +1,12 @@
 _start:
-	xor a0, a0, a0
-	xor a1, a1, a1
-	addi a1, a1, 100
+	xor ra, ra, ra
+	xor sp, sp, sp
+	addi sp, sp, 100
 
 count:
-	addi a0, a0, 1
-	blt a0, a1, count
+	addi ra, ra, 1
+	blt ra, sp, count
 
 reset:
-	xor a0, a0, a0
-	beq a0, a0, count
+	xor ra, ra, ra
+	beq ra, ra, count

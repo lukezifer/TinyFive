@@ -1,18 +1,19 @@
 
+
 a.out:     file format elf32-littleriscv
 
 
 Disassembly of section .text:
 
 00000000 <_start>:
-   0:	00a54533          	xor	a0,a0,a0
-   4:	00b5c5b3          	xor	a1,a1,a1
-   8:	06458593          	addi	a1,a1,100
+   0:	0010c0b3          	xor	ra,ra,ra
+   4:	00214133          	xor	sp,sp,sp
+   8:	06410113          	addi	sp,sp,100
 
 0000000c <count>:
-   c:	00150513          	addi	a0,a0,1
-  10:	feb54ee3          	blt	a0,a1,c <count>
+   c:	00108093          	addi	ra,ra,1
+  10:	fe20cee3          	blt	ra,sp,c <count>
 
 00000014 <reset>:
-  14:	00a54533          	xor	a0,a0,a0
-  18:	fea50ae3          	beq	a0,a0,c <count>
+  14:	0010c0b3          	xor	ra,ra,ra
+  18:	fe108ae3          	beq	ra,ra,c <count>
