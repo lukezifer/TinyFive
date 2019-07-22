@@ -10,6 +10,9 @@ end tb_rom;
 architecture behaviour of tb_rom is
 
 	component rom
+		generic(
+			size : integer
+		);
 		port(
 			clk : in std_logic;
 			addr : in std_logic_vector(7 downto 0);
@@ -24,6 +27,9 @@ architecture behaviour of tb_rom is
 
 begin
 dut: rom
+generic map (
+	size => 256
+)
 port map(
 	clk  => tb_clk,
 	addr => tb_addr,

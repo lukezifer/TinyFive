@@ -9,6 +9,9 @@ end tb_ram;
 
 architecture behaviour of tb_ram is
 	component ram is
+		generic(
+			size : integer
+		);
 		port(
 			clk : in std_logic;
 			addr : in std_logic_vector(7 downto 0);
@@ -31,6 +34,9 @@ architecture behaviour of tb_ram is
 
 begin
 dut: ram
+generic map(
+	size => 256
+)
 port map(
 	clk  => tb_clk,
 	addr => tb_addr,

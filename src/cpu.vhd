@@ -25,11 +25,14 @@ architecture behaviour of cpu is
 	end component pc;
 
 	component rom is
+		generic (
+			size : integer
+		);
 		port (
 			clk : in std_logic;
 			addr : in std_logic_vector(7 downto 0);
 			dout : out std_logic_vector(31 downto 0)
-	);
+		);
 	end component rom;
 
 	component reg is
@@ -78,6 +81,9 @@ architecture behaviour of cpu is
 	end component alu;
 
 	component ram is
+		generic (
+			size : integer
+		);
 		port (
 			clk : in std_logic;
 			addr : in std_logic_vector(7 downto 0);
@@ -142,6 +148,9 @@ port map(
 	);
 
 read_only_memory: rom
+generic map (
+	size => 256
+	)
 port map(
 	clk => clk,
 	addr => pc_out(9 downto 2),
@@ -190,6 +199,9 @@ port map(
 	);
 
 random_access_memory: ram
+generic map(
+	size => 256
+)
 port map(
 	clk => clk,
 	addr => alu_out(7 downto 0),

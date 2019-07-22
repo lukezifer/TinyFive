@@ -3,6 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity rom is
+generic(
+	size : integer
+);
 port(
 	clk		: in  std_logic;
 	addr	: in  std_logic_vector(7 downto 0);
@@ -11,7 +14,7 @@ port(
 end entity rom;
 
 architecture behaviour of rom is
-	type rom_t is array(0 to 255) of std_logic_vector(31 downto 0);
+	type rom_t is array(0 to size - 1) of std_logic_vector(31 downto 0);
 	signal rom_set : rom_t := (
 		--_start
 		x"0010c0b3",	--xor ra, ra, ra

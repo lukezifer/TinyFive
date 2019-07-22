@@ -3,6 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity ram is
+generic(
+	size : integer
+);
 port(
 	clk		: in  std_logic;
 	addr	: in  std_logic_vector(7 downto 0);
@@ -15,7 +18,7 @@ port(
 end entity ram;
 
 architecture behaviour of ram is
-	type ram_t is array(0 to 255) of std_logic_vector(31 downto 0);
+	type ram_t is array(0 to size - 1) of std_logic_vector(31 downto 0);
 	signal ram_set : ram_t := (others => (others => '0'));
 begin
 	data_mem: process(clk)
