@@ -1,0 +1,25 @@
+digraph CPU {
+
+	rankdir=LR;
+	node [shape=square];
+
+
+	nd_alu [label = "alu"];
+	nd_alu_ctrl [label = "alu_ctrl"];
+	nd_ctrl [label = "ctrl"];
+	nd_imm_gen [label = "imm_gen"];
+	nd_pc  [label = "pc"];
+	nd_ram [label = "ram"];
+	nd_reg [label = "reg"];
+	nd_rom [label = "rom"];
+	nd_types [label = "types"];
+	nd_utils [label = "utils"];
+
+	nd_pc -> nd_rom -> nd_reg -> nd_alu -> nd_ram;
+	nd_rom -> nd_ctrl;
+	nd_ctrl -> nd_alu_ctrl -> nd_alu;
+	nd_ctrl -> nd_reg;
+	nd_ctrl -> nd_ram;
+	nd_rom -> nd_imm_gen;
+
+}
