@@ -26,6 +26,15 @@ begin
 		--S-Type
 		when "0100011" =>
 			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 25) & instr_in(11 downto 7)), immediate_out'length));
+		--U-Type
+		when "0110111" =>
+			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 12) & "000000000000"), immediate_out'length));
+		--J-Type
+		when "1101111" =>
+			immediate_out <= std_logic_vector(resize(signed(instr_in(31) & instr_in(19 downto 12) & instr_in(20) & instr_in(30 downto 21)), immediate_out'length));
+		--JALR Offset I-Type
+		when "1100111" =>
+			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 21) & '0'), immediate_out'length));
 		when others =>
 			immediate_out <= (others => '0');
 	end case;
