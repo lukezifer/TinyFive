@@ -4,7 +4,7 @@ os: linux
 before_install:
     - sudo apt-get update
     - sudo apt-get install -y gnat zlib1g-dev
-    - git clone https://github.com/ghdl/ghdl
+    - if [ -d "gdhl" ]; then git pull; else; git clone https://github.com/ghdl/ghdl; fi;
 
 install:
     - cd ghdl
