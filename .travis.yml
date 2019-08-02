@@ -23,4 +23,4 @@ after_script:
 
 cache:
     directories:
-        - /home/travis/ghdl
+        - /home/travis/build/Lukeekul/TinyFive/ghdl
