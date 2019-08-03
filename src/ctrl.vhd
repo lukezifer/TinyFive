@@ -8,6 +8,7 @@ entity ctrl is
 port(
 	opcode	: in	std_logic_vector(6 downto 0);
 	branch	: out	std_logic;
+	jump	:out	std_logic;
 	mem_read	: out	std_logic;
 	mem_to_reg	: out	std_logic;
 	alu_op	: out	ALU_OP_ENUM;
@@ -26,6 +27,7 @@ begin
 			--R-Instruction 0110011
 			when "0110011" =>
 				branch <= '0';
+				jump <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
 				alu_op <= ALU_OP_R;
@@ -35,6 +37,7 @@ begin
 			--I-Instruction 0010011
 			when "0010011" =>
 				branch <= '0';
+				jump <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
 				alu_op <= ALU_OP_I;
@@ -44,6 +47,7 @@ begin
 			--B-Instruction 1100011
 			when "1100011" =>
 				branch <= '1';
+				jump <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
 				alu_op <= ALU_OP_B;
@@ -53,15 +57,27 @@ begin
 			when "0100011" =>
 			--S-Instruction 0100011
 				branch <= '0';
+				jump <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
 				alu_op <= ALU_OP_S;
 				mem_write <= '1';
 				alu_src <= '1';
 				reg_write <= '0';
+			when "1101111" =>
+			--J-Instruction 1101111
+				branch <= '0';
+				jump <= '1';
+				mem_read <= '0';
+				mem_to_reg <= '0';
+				alu_op <= ALU_OP_R;
+				mem_write <= '1';
+				alu_src <= '0';
+				reg_write <= '1';
 			--Others not implemented yet
 			when others =>
 				branch <= '0';
+				jump <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
 				alu_op <= ALU_OP_R;

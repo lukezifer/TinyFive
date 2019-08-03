@@ -53,6 +53,7 @@ architecture behaviour of cpu is
 		port (
 			opcode : in std_logic_vector(6 downto 0);
 			branch : out std_logic;
+			jump : out std_logic;
 			mem_read : out std_logic;
 			mem_to_reg : out std_logic;
 			alu_op : out ALU_OP_ENUM;
@@ -120,6 +121,7 @@ architecture behaviour of cpu is
 	signal reg_r_data1 : std_logic_vector(31 downto 0);
 	signal reg_r_data2 : std_logic_vector(31 downto 0);
 	signal ctrl_branch : std_logic;
+	signal ctrl_jump : std_logic;
 	signal ctrl_mem_read : std_logic;
 	signal ctrl_mem_to_reg : std_logic;
 	signal ctrl_mem_write : std_logic;
@@ -174,6 +176,7 @@ control: ctrl
 port map(
 	opcode => rom_instr(6 downto 0),
 	branch => ctrl_branch,
+	jump => ctrl_jump,
 	mem_read => ctrl_mem_read,
 	mem_to_reg => ctrl_mem_to_reg,
 	alu_op => ctrl_alu_op,
@@ -239,18 +242,22 @@ begin
 	end if;
 end process alu_src;
 
-reg_write_src: process(ctrl_mem_to_reg, ram_out, alu_out)
+reg_write_src: process(ctrl_mem_to_reg, ctrl_jump, ram_out, alu_out, pc_out)
 begin
-	if(ctrl_mem_to_reg = '1') then
-		cpu_alu_mem_out <= ram_out;
+	if(ctrl_jump = '1') then
+		cpu_alu_mem_out <= std_logic_vector(unsigned(pc_out) + 4);
 	else
-		cpu_alu_mem_out <= alu_out;
+		if(ctrl_mem_to_reg = '1') then
+			cpu_alu_mem_out <= ram_out;
+		else
+			cpu_alu_mem_out <= alu_out;
+		end if;
 	end if;
 end process reg_write_src;
 
-pc_src: process(ctrl_branch, branch_cmp_branch, pc_out)
+pc_src: process(ctrl_branch, branch_cmp_branch, ctrl_jump)
 begin
-	if(ctrl_branch = '1' and branch_cmp_branch = '1') then
+	if((ctrl_branch = '1' and branch_cmp_branch = '1') or ctrl_jump = '1') then
 		pc_en <= '0';
 		pc_ld <= '1';
 	else
