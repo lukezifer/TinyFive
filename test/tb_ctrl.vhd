@@ -116,7 +116,7 @@ begin
 	assert (tb_mem_to_reg = '0') report " J-Type mem_to_reg failed" severity failure;
 	assert (tb_reg_write = '1') report " J-Type reg_write failed" severity failure;
 	assert (tb_mem_read = '0') report " J-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '1') report " J-Type mem_write failed" severity failure;
+	assert (tb_mem_write = '0') report " J-Type mem_write failed" severity failure;
 	assert (tb_branch = '0') report " J-Type branch failed" severity failure;
 	assert (tb_jump = '1') report " J-Types jump failed" severity failure;
 	assert (tb_alu_op = ALU_OP_R) report "J-Type alu_op failed" severity failure;

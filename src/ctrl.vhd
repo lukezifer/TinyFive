@@ -71,7 +71,7 @@ begin
 				mem_read <= '0';
 				mem_to_reg <= '0';
 				alu_op <= ALU_OP_R;
-				mem_write <= '1';
+				mem_write <= '0';
 				alu_src <= '0';
 				reg_write <= '1';
 			--Others not implemented yet
