@@ -53,6 +53,7 @@ architecture behaviour of cpu is
 		port (
 			opcode : in std_logic_vector(6 downto 0);
 			branch : out std_logic;
+			imm_in : out std_logic;
 			jump : out std_logic;
 			mem_read : out std_logic;
 			mem_to_reg : out std_logic;
@@ -121,6 +122,7 @@ architecture behaviour of cpu is
 	signal reg_r_data1 : std_logic_vector(31 downto 0);
 	signal reg_r_data2 : std_logic_vector(31 downto 0);
 	signal ctrl_branch : std_logic;
+	signal ctrl_imm_in : std_logic;
 	signal ctrl_jump : std_logic;
 	signal ctrl_mem_read : std_logic;
 	signal ctrl_mem_to_reg : std_logic;
@@ -176,6 +178,7 @@ control: ctrl
 port map(
 	opcode => rom_instr(6 downto 0),
 	branch => ctrl_branch,
+	imm_in => ctrl_imm_in,
 	jump => ctrl_jump,
 	mem_read => ctrl_mem_read,
 	mem_to_reg => ctrl_mem_to_reg,
@@ -246,6 +249,8 @@ reg_write_src: process(ctrl_mem_to_reg, ctrl_jump, ram_out, alu_out, pc_out)
 begin
 	if(ctrl_jump = '1') then
 		cpu_alu_mem_out <= std_logic_vector(unsigned(pc_out) + 4);
+	elsif(ctrl_imm_in = '1') then
+		cpu_alu_mem_out <= imm_gen_output(31 downto 0);
 	else
 		if(ctrl_mem_to_reg = '1') then
 			cpu_alu_mem_out <= ram_out;
