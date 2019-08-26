@@ -60,7 +60,8 @@ architecture behaviour of cpu is
 			alu_op : out ALU_OP_ENUM;
 			mem_write : out std_logic;
 			alu_src : out std_logic;
-			reg_write : out std_logic
+			reg_write : out std_logic;
+			pc_imm : out std_logic
 		);
 	end component ctrl;
 
@@ -130,10 +131,12 @@ architecture behaviour of cpu is
 	signal ctrl_alu_src : std_logic;
 	signal ctrl_reg_write : std_logic;
 	signal ctrl_alu_op : ALU_OP_ENUM;
+	signal ctrl_pc_imm : std_logic;
 	signal alu_ctrl_alu_instr : ALU_INSTR_ENUM;
 	signal alu_out : std_logic_vector(31 downto 0);
 	signal alu_z_flag : std_logic;
 	signal ram_out : std_logic_vector(31 downto 0);
+	signal imm_gen_input : std_logic_vector(31 downto 0);
 	signal imm_gen_output : std_logic_vector(63 downto 0);
 	signal branch_cmp_branch : std_logic;
 	signal cpu_alu_src_data : std_logic_vector(31 downto 0);
@@ -185,7 +188,8 @@ port map(
 	alu_op => ctrl_alu_op,
 	mem_write => ctrl_mem_write,
 	alu_src => ctrl_alu_src,
-	reg_write => ctrl_reg_write
+	reg_write => ctrl_reg_write,
+	pc_imm => ctrl_pc_imm
 	);
 
 alu_control: alu_ctrl
@@ -220,7 +224,7 @@ port map(
 
 immedaite_generate: imm_gen
 port map(
-	instr_in => rom_instr(31 downto 0),
+	instr_in => imm_gen_input,
 	immediate_out => imm_gen_output
 	);
 
@@ -270,5 +274,14 @@ begin
 		pc_ld <= '0';
 	end if;
 end process pc_src;
+
+imm_gen_src: process(ctrl_pc_imm)
+begin
+	if(ctrl_pc_imm = '1') then
+		imm_gen_input <= pc_out;
+	else
+		imm_gen_input <= rom_instr;
+	end if;
+end process imm_gen_src;
 
 end architecture;
