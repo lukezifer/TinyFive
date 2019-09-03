@@ -6,8 +6,10 @@ use work.types.all;
 
 entity cpu is
 port(
-	clk: in std_logic;
-	rst: in std_logic
+	clk : in std_logic;
+	rst : in std_logic;
+	test : in std_logic;
+	test_instr : in std_logic_vector(31 downto 0)
 );
 end cpu;
 
@@ -120,6 +122,7 @@ architecture behaviour of cpu is
 	signal pc_in : std_logic_vector(31 downto 0);
 	signal pc_out: std_logic_vector(31 downto 0);
 	signal rom_instr : std_logic_vector(31 downto 0);
+	signal cpu_instr : std_logic_vector(31 downto 0);
 	signal reg_r_data1 : std_logic_vector(31 downto 0);
 	signal reg_r_data2 : std_logic_vector(31 downto 0);
 	signal ctrl_branch : std_logic;
@@ -239,6 +242,15 @@ port map(
 
 cpu_branch_immediate <= std_logic_vector(shift_left(unsigned(imm_gen_output), 1));
 pc_in <= std_logic_vector(signed(pc_out) + signed(cpu_branch_immediate(31 downto 0)));
+
+test_cpu : process (test, test_instr, rom_instr)
+begin
+	if test = '1' then
+		cpu_instr <= test_instr;
+	else 
+		cpu_instr <= rom_instr;
+	end if;
+end process test_cpu;
 
 alu_src : process (ctrl_alu_src, reg_r_data2, imm_gen_output)
 begin
