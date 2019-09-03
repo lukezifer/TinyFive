@@ -155,13 +155,13 @@ begin
 	wait for CLOCK_PERIOD;
 	assert (tb_alu_src = '0') report " U-Type alu_src failed" severity failure;
 	assert (tb_mem_to_reg = '0') report " U-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '0') report " U-Type reg_write failed" severity failure;
+	assert (tb_reg_write = '1') report " U-Type reg_write failed" severity failure;
 	assert (tb_mem_read = '0') report " U-Type mem_read failed" severity failure;
 	assert (tb_mem_write = '0') report " U-Type mem_write failed" severity failure;
 	assert (tb_branch = '0') report " U-Type branch failed" severity failure;
 	assert (tb_jump = '0') report " U-Types jump failed" severity failure;
 	assert (tb_imm_in = '1') report " U-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_R) report "U-Type alu_op failed" severity failure;
+	assert (tb_alu_op = ALU_OP_U) report "U-Type alu_op failed" severity failure;
 	assert (tb_pc_imm = '1') report "U-Type pc_imm failed" severity failure;
 
 	wait;

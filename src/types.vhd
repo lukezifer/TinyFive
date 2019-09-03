@@ -19,10 +19,11 @@ package types is
 
 	type ALU_OP_ENUM is
 	(
+		ALU_OP_B,
 		ALU_OP_I,
 		ALU_OP_R,
 		ALU_OP_S,
-		ALU_OP_B
+		ALU_OP_U
 	);
 
 end package types;

@@ -101,14 +101,14 @@ begin
 			--U-Instruction auipc 0010111
 			when "0010111" =>
 				branch <= '0';
-				imm_in <= '0';
+				imm_in <= '1';
 				jump <= '0';
 				mem_read <= '0';
 				mem_to_reg <= '0';
-				alu_op <= ALU_OP_R;
+				alu_op <= ALU_OP_U;
 				mem_write <= '0';
 				alu_src <= '0';
-				reg_write <= '0';
+				reg_write <= '1';
 				pc_imm <= '1';
 			--Others not implemented yet
 			when others =>

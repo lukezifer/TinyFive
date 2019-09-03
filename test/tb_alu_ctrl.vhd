@@ -1,6 +1,6 @@
 library ieee;
-use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use work.types.all;
 
@@ -141,6 +141,14 @@ begin
 	tb_instr_in <= b"0000000_00010_00001_010_01010_0100011";
 	wait for CLOCK_PERIOD;
 	assert (tb_alu_instr = ALU_INSTR_ADD) report "S-Type failed" severity failure;
+
+	--U-Type
+	tb_alu_op <= ALU_OP_U;
+	-- immediate - rd - opcode
+	wait for CLOCK_PERIOD;
+	--auipc
+	tb_instr_in <= b"00000000000000000001_00001_0010111";
+	assert (tb_alu_instr = ALU_INSTR_ADD) report "U-Type failed" severity failure;
 	wait;
 
 end process test;

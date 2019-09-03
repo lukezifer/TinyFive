@@ -92,6 +92,9 @@ begin
 		--S-Type
 			when ALU_OP_S =>
 				alu_instr <= ALU_INSTR_ADD;
+		--U-Type
+			when ALU_OP_U =>
+				alu_instr <= ALU_INSTR_ADD;
 		--default
 			when others =>
 				alu_instr <= ALU_INSTR_ZERO;
