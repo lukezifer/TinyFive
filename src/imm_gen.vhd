@@ -6,6 +6,7 @@ use ieee.numeric_std.all;
 entity imm_gen is
 port(
 	instr_in : in std_logic_vector(31 downto 0);
+	regs1_in : in std_logic_vector (31 downto 0);
 	immediate_out : out std_logic_vector(63 downto 0)
 );
 end imm_gen;
@@ -15,6 +16,7 @@ architecture behaviour of imm_gen is
 begin
 	instr_type <= instr_in(6 downto 0);
 	process(instr_in, instr_type)
+		variable t: unsigned(32 downto 0);
 	begin
 	case instr_type is
 		--B-Type
@@ -34,7 +36,9 @@ begin
 			immediate_out <= std_logic_vector(resize(signed(instr_in(31) & instr_in(19 downto 12) & instr_in(20) & instr_in(30 downto 21)), immediate_out'length));
 		--JALR Offset I-Type
 		when "1100111" =>
-			immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 21) & '0'), immediate_out'length));
+			t := (unsigned(regs1_in) + unsigned(resize(signed(instr_in(31 downto 21)), regs1_in'length))) & '0';
+			immediate_out <= std_logic_vector(resize(t(31 downto 0), immediate_out'length));
+			--immediate_out <= std_logic_vector(resize(signed(instr_in(31 downto 21) & '0'), immediate_out'length));
 		when others =>
 			immediate_out <= (others => '0');
 	end case;

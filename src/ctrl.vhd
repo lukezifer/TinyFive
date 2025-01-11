@@ -50,6 +50,18 @@ begin
 				alu_src <= '1';
 				reg_write <= '1';
 				pc_imm <= '0';
+			--I-Instruction 1100111 jalr
+			when "1100111" =>
+				branch <= '0';
+				imm_in <= '0';
+				jump <= '0';
+				mem_read <= '0';
+				mem_to_reg <= '0';
+				alu_op <= ALU_OP_I;
+				mem_write <= '0';
+				alu_src <= '1';
+				reg_write <= '1';
+				pc_imm <= '0';
 			--B-Instruction 1100011
 			when "1100011" =>
 				branch <= '1';

@@ -103,6 +103,7 @@ architecture behaviour of cpu is
 	component imm_gen is
 		port (
 			instr_in : in std_logic_vector(31 downto 0);
+			regs1_in : in std_logic_vector(31 downto 0);
 			immediate_out : out std_logic_vector(63 downto 0)
 		);
 	end component imm_gen;
@@ -228,6 +229,7 @@ port map(
 immedaite_generate: imm_gen
 port map(
 	instr_in => imm_gen_input,
+	regs1_in => reg_r_data1,
 	immediate_out => imm_gen_output
 	);
 
