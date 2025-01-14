@@ -1,5 +1,8 @@
 # synthesis folder
 syn
 
-# ctags
-tags
+# vunit folder
+vunit_out
+
+# sym artifacts
+e*.o

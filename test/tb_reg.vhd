@@ -1,7 +1,13 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+library vunit_lib;
+use vunit_lib.check_pkg.all;
+use vunit_lib.run_pkg.all;
 
 entity tb_reg is
+	generic (runner_cfg: string);
 end tb_reg;
 
 architecture behaviour of tb_reg is
@@ -52,21 +58,93 @@ begin
 	wait for CLOCK_PERIOD/2;
 end process clock;
 
-test: process
+test_runner: process
+	variable i : integer := 0;
 begin
-	tb_rst <= '1';
-	tb_w_enable <= '0';
-	tb_w_addr <= "00000";
-	tb_r_addr1 <= "00000";
-	tb_r_addr2 <= "00000";
-	tb_w_data <= x"00000000";
-	tb_r_data1 <= x"00000000";
-	tb_r_data2 <= x"00000000";
-	wait for CLOCK_PERIOD * 2;
-	tb_rst <= '0';
-	wait for CLOCK_PERIOD;
 
-	wait;
-end process test;
+	test_runner_setup(runner, runner_cfg);
+
+	while test_suite loop
+		i := 0;
+		tb_rst <= '0';
+		tb_w_enable <= '0';
+		tb_w_addr <= b"00000";
+		tb_r_addr1 <= b"00000";
+		tb_r_addr2 <= b"00000";
+		tb_w_data <= x"00000000";
+
+		if run("Reset") then
+			tb_w_data <= x"FFFF0000";
+			tb_w_addr <= b"00001";
+			wait for CLOCK_PERIOD;
+			tb_w_data <= x"0000FFFF";
+			tb_w_addr <= b"00000";
+			wait for CLOCK_PERIOD;
+			tb_rst <= '1';
+			wait for CLOCK_PERIOD * 2;
+			tb_rst <= '0';
+			wait for CLOCK_PERIOD;
+			while i < 32 loop
+				tb_r_addr1 <= std_logic_vector(to_unsigned(i, tb_r_addr1'length));
+				tb_r_addr2 <= std_logic_vector(to_unsigned(i + 1, tb_r_addr2'length));
+				wait for CLOCK_PERIOD;
+				check_match(tb_r_data1, x"00000000");
+				check_match(tb_r_data2, x"00000000");
+				i := i + 2;
+			end loop;
+		elsif run("Write/Read") then
+			tb_rst <= '1';
+			wait for CLOCK_PERIOD * 2;
+			tb_rst <= '0';
+			tb_w_enable <= '1';
+			wait for CLOCK_PERIOD;
+			while i < 32 loop
+				tb_w_addr <= std_logic_vector(to_unsigned(i, tb_w_addr'length));
+				tb_w_data <= std_logic_vector(to_unsigned(i, tb_w_data'length));
+				wait for CLOCK_PERIOD;
+				tb_w_addr <= std_logic_vector(to_unsigned(i + 1, tb_w_addr'length));
+				tb_w_data <= std_logic_vector(to_unsigned(i + 1, tb_w_data'length));
+				wait for CLOCK_PERIOD;
+				tb_r_addr1 <= std_logic_vector(to_unsigned(i, tb_r_addr1'length));
+				tb_r_addr2 <= std_logic_vector(to_unsigned(i + 1, tb_r_addr2'length));
+				wait for CLOCK_PERIOD;
+				check_match(tb_r_data1, std_logic_vector(to_unsigned(i, tb_r_data1'length)));
+				check_match(tb_r_data2, std_logic_vector(to_unsigned(i + 1, tb_r_data2'length)));
+				i := i + 2;
+			end loop;
+		elsif run("Write Not Enabled") then
+			tb_rst <= '1';
+			wait for CLOCK_PERIOD * 2;
+			tb_rst <= '0';
+			tb_w_enable <= '1';
+			wait for CLOCK_PERIOD;
+			while i < 32 loop
+				tb_w_addr <= std_logic_vector(to_unsigned(i, tb_w_addr'length));
+				tb_w_data <= std_logic_vector(to_unsigned(i, tb_w_data'length));
+				wait for CLOCK_PERIOD;
+				tb_w_addr <= std_logic_vector(to_unsigned(i + 1, tb_w_addr'length));
+				tb_w_data <= std_logic_vector(to_unsigned(i + 1, tb_w_data'length));
+				wait for CLOCK_PERIOD;
+				i := i + 2;
+			end loop;
+			tb_w_enable <= '0';
+			wait for CLOCK_PERIOD;
+			tb_w_data <= x"FFFFFFFF";
+			tb_w_addr <= b"00000";
+			wait for CLOCK_PERIOD;
+			tb_w_addr <= b"00001";
+			wait for CLOCK_PERIOD;
+			tb_r_addr1 <= b"00000";
+			tb_r_addr2 <= b"00001";
+			wait for CLOCK_PERIOD;
+			check_match(tb_r_data1, x"00000000");
+			check_match(tb_r_data2, x"00000001");
+		end if;
+
+	end loop;
+
+	test_runner_cleanup(runner);
+
+end process test_runner;
 
 end architecture behaviour;

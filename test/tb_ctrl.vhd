@@ -4,7 +4,12 @@ use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
 use work.types.all;
 
+library vunit_lib;
+use vunit_lib.check_pkg.all;
+use vunit_lib.run_pkg.all;
+
 entity tb_ctrl is
+	generic (runner_cfg: string);
 end entity tb_ctrl;
 
 architecture behaviour of tb_ctrl is
@@ -62,109 +67,132 @@ begin
 	wait for CLOCK_PERIOD/2;
 end process clock;
 
-test: process
+test_runner: process
 begin
-	--initialization
-	tb_opcode <= "1111111";
-	wait for CLOCK_PERIOD;
-	--R-Type
-	tb_opcode <= "0110011";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '0') report " R-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0') report " R-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '1') report " R-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " R-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '0') report " R-Type mem_write failed" severity failure;
-	assert (tb_branch = '0') report " R-Type branch failed" severity failure;
-	assert (tb_jump = '0') report " R-Types jump failed" severity failure;
-	assert (tb_imm_in = '0') report " R-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_R) report "R-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '0') report "R-Type pc_imm failed" severity failure;
-	wait for CLOCK_PERIOD;
-	--I-Type
-	tb_opcode <= "0010011";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '1') report " I-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0') report " I-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '1') report " I-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " I-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '0') report " I-Type mem_write failed" severity failure;
-	assert (tb_branch = '0') report " I-Type branch failed" severity failure;
-	assert (tb_jump = '0') report " I-Types jump failed" severity failure;
-	assert (tb_imm_in = '0') report " I-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_I) report "I-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '0') report "I-Type pc_imm failed" severity failure;
-	wait for CLOCK_PERIOD;
-	--B-Type
-	tb_opcode <= "1100011";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '0') report " B-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0' or tb_mem_to_reg = '1') report " B-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '0') report " B-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " B-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '0') report " B-Type mem_write failed" severity failure;
-	assert (tb_branch = '1') report " B-Type branch failed" severity failure;
-	assert (tb_jump = '0') report " B-Types jump failed" severity failure;
-	assert (tb_imm_in = '0') report " B-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_B) report "B-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '0') report "B-Type pc_imm failed" severity failure;
-	wait for CLOCK_PERIOD;
-	--S-Type
-	tb_opcode <= "0100011";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '1') report " S-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0' or tb_mem_to_reg = '1') report " S-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '0') report " S-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " S-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '1') report " S-Type mem_write failed" severity failure;
-	assert (tb_branch = '0') report " S-Type branch failed" severity failure;
-	assert (tb_jump = '0') report " S-Types jump failed" severity failure;
-	assert (tb_imm_in = '0') report " S-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_S) report "S-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '0') report "S-Type pc_imm failed" severity failure;
-	wait for CLOCK_PERIOD;
-	--J-Type
-	tb_opcode <= "1101111";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '0') report " J-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0') report " J-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '1') report " J-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " J-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '0') report " J-Type mem_write failed" severity failure;
-	assert (tb_branch = '0') report " J-Type branch failed" severity failure;
-	assert (tb_jump = '1') report " J-Types jump failed" severity failure;
-	assert (tb_imm_in = '0') report " J-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_R) report "J-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '0') report "J-Type pc_imm failed" severity failure;
-	wait for CLOCK_PERIOD;
-	--U-Type lui
-	tb_opcode <= "0110111";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '0') report " U-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0') report " U-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '1') report " U-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " U-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '0') report " U-Type mem_write failed" severity failure;
-	assert (tb_branch = '0') report " U-Type branch failed" severity failure;
-	assert (tb_jump = '0') report " U-Types jump failed" severity failure;
-	assert (tb_imm_in = '1') report " U-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_R) report "U-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '0') report "U-Type pc_imm failed" severity failure;
-	--U-Type auipc
-	tb_opcode <= "0010111";
-	wait for CLOCK_PERIOD;
-	assert (tb_alu_src = '0') report " U-Type alu_src failed" severity failure;
-	assert (tb_mem_to_reg = '0') report " U-Type mem_to_reg failed" severity failure;
-	assert (tb_reg_write = '1') report " U-Type reg_write failed" severity failure;
-	assert (tb_mem_read = '0') report " U-Type mem_read failed" severity failure;
-	assert (tb_mem_write = '0') report " U-Type mem_write failed" severity failure;
-	assert (tb_branch = '0') report " U-Type branch failed" severity failure;
-	assert (tb_jump = '0') report " U-Types jump failed" severity failure;
-	assert (tb_imm_in = '1') report " U-Types imm_in failed" severity failure;
-	assert (tb_alu_op = ALU_OP_U) report "U-Type alu_op failed" severity failure;
-	assert (tb_pc_imm = '1') report "U-Type pc_imm failed" severity failure;
+	test_runner_setup(runner, runner_cfg);
+	while test_suite loop
+		--initialization
+		tb_opcode <= "1111111";
+		wait for CLOCK_PERIOD;
 
-	wait;
-end process test;
+		if run("R-Type") then
+		--R-Type
+			tb_opcode <= "0110011";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '0');
+			check_match(tb_mem_to_reg, '0');
+			check_match(tb_reg_write, '1');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '0');
+			check_match(tb_branch, '0');
+			check_match(tb_jump, '0');
+			check_match(tb_imm_in, '0');
+			check(tb_alu_op = ALU_OP_R);
+			check_match(tb_pc_imm, '0');
+
+		elsif run("I-Type") then
+		--I-Type
+			tb_opcode <= "0010011";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '1');
+			check_match(tb_mem_to_reg, '0');
+			check_match(tb_reg_write, '1');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '0');
+			check_match(tb_branch, '0');
+			check_match(tb_jump, '0');
+			check_match(tb_imm_in, '0');
+			check(tb_alu_op = ALU_OP_I);
+			check_match(tb_pc_imm, '0');
+
+		elsif run("B-Type") then
+		--B-Type
+			tb_opcode <= "1100011";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '0');
+			check(tb_mem_to_reg = '0' or tb_mem_to_reg = '1');
+			check_match(tb_reg_write, '0');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '0');
+			check_match(tb_branch, '1');
+			check_match(tb_jump, '0');
+			check_match(tb_imm_in, '0');
+			check(tb_alu_op = ALU_OP_B);
+			check_match(tb_pc_imm, '0');
+
+		elsif run("S-Type") then
+		--S-Type
+			tb_opcode <= "0100011";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '1');
+			check(tb_mem_to_reg = '0' or tb_mem_to_reg = '1');
+			check_match(tb_reg_write, '0');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '1');
+			check_match(tb_branch, '0');
+			check_match(tb_jump, '0');
+			check_match(tb_imm_in, '0');
+			check(tb_alu_op = ALU_OP_S);
+			check_match(tb_pc_imm, '0');
+
+		elsif run("J-Type") then
+		--J-Type
+			tb_opcode <= "1101111";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '0');
+			check_match(tb_mem_to_reg, '0');
+			check_match(tb_reg_write, '1');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '0');
+			check_match(tb_branch, '0');
+			check_match(tb_jump, '1');
+			check_match(tb_imm_in, '0');
+			check(tb_alu_op = ALU_OP_R);
+			check_match(tb_pc_imm, '0');
+
+		elsif run("U-Type 1") then
+		--U-Type lui
+			tb_opcode <= "0110111";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '0');
+			check_match(tb_mem_to_reg, '0');
+			check_match(tb_reg_write, '1');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '0');
+			check_match(tb_branch, '0');
+			check_match(tb_jump, '0');
+			check_match(tb_imm_in, '1');
+			check(tb_alu_op = ALU_OP_R);
+			check_match(tb_pc_imm, '0');
+
+		elsif run("U-Type 2") then
+		--U-Type auipc
+			tb_opcode <= "0010111";
+			wait for CLOCK_PERIOD;
+
+			check_match(tb_alu_src, '0');
+			check_match(tb_mem_to_reg, '0');
+			check_match(tb_reg_write, '1');
+			check_match(tb_mem_read, '0');
+			check_match(tb_mem_write, '0');
+			check_match(tb_branch, '0');
+			check_match(tb_jump, '0');
+			check_match(tb_imm_in, '1');
+			check(tb_alu_op = ALU_OP_U);
+			check_match(tb_pc_imm, '1');
+
+		end if;
+
+	end loop;
+
+test_runner_cleanup(runner);
+
+end process test_runner;
 
 end architecture behaviour;

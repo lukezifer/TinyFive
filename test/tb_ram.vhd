@@ -2,9 +2,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
-use work.utils.all;
+
+library vunit_lib;
+use vunit_lib.check_pkg.all;
+use vunit_lib.run_pkg.all;
 
 entity tb_ram is
+	generic (runner_cfg : string);
 end tb_ram;
 
 architecture behaviour of tb_ram is
@@ -55,8 +59,11 @@ begin
 	wait for CLOCK_PERIOD/2;
 end process clock;
 
-test: process
+test_runner: process
 begin
+
+	test_runner_setup(runner,runner_cfg);
+
 	--Init, set inputs to zero
 	tb_r_en <= '0';
 	tb_w_en <= '0';
@@ -64,101 +71,114 @@ begin
 	tb_addr <= b"00000000";
 	tb_din <= x"00000000";
 	wait for CLOCK_PERIOD;
-	--Testcase 1, test RW
-	tb_r_en <= '0';
-	tb_w_en <= '1';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000001";
-	tb_din <= x"00000001";
-	wait for CLOCK_PERIOD;
-	tb_r_en <= '1';
-	tb_w_en <= '0';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000001";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000001#) report "Testcase 1 RW failed, dout is " & to_hex_string(tb_dout) severity failure;
-	--Testcase 2, test simultan RW
-	tb_r_en <= '1';
-	tb_w_en <= '1';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000010";
-	tb_din <= x"00000011";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000011#) report "Testcase 2 simultan RW failed, dout is " & to_hex_string(tb_dout) severity failure;
-	--Testcase 3, test async R
-	tb_r_en <= '1';
-	tb_w_en <= '1';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000010";
-	tb_din <= x"00000011";
-	wait for CLOCK_PERIOD;
-	tb_r_en <= '0';
-	tb_w_en <= '1';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000011";
-	tb_din <= x"00000111";
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '1';
-	tb_r_en <= '0';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000110";
-	tb_din <= x"00001111";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = 16#00000011#) report "Testcase 3 async R failed, dout is " & to_hex_string(tb_dout) severity failure;
-	--Testcase 4, test sb, lb, lbu
-	tb_w_en <= '0';
-	tb_r_en <= '0';
-	tb_funct3 <= b"000";
-	tb_addr <= b"00000010";
-	tb_din <= x"FFFFFFFF";
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '1';
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '0';
-	tb_r_en <= '1';
-	wait for CLOCK_PERIOD;
-	tb_funct3 <= b"100";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = x"000000FF") report "Testcase 4 sb/lbu failed, dout is " & to_hex_string(tb_dout) severity failure;
-	wait for CLOCK_PERIOD;
-	tb_funct3 <= b"000";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = x"FFFFFFFF") report "Testcase 4 sb/lb failed, dout is " & to_hex_string(tb_dout) severity failure;
-	--Testcase 5, test sh, lh, lhu
-	tb_w_en <= '0';
-	tb_r_en <= '0';
-	tb_funct3 <= b"001";
-	tb_addr <= b"00000011";
-	tb_din <= x"0000FFF0";
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '1';
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '0';
-	tb_r_en <= '1';
-	wait for CLOCK_PERIOD;
-	tb_funct3 <= b"101";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = x"0000FFF0") report "Testcase 5 sb/lhu failed, dout is " & to_hex_string(tb_dout) severity failure;
-	wait for CLOCK_PERIOD;
-	tb_funct3 <= b"000";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = x"FFFFFFF0") report "Testcase 5 sb/lh failed, dout is " & to_hex_string(tb_dout) severity failure;
-	--Testcase 6, test sw, lw
-	tb_w_en <= '0';
-	tb_r_en <= '0';
-	tb_funct3 <= b"010";
-	tb_addr <= b"00000111";
-	tb_din <= x"F0F0F0F0";
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '1';
-	wait for CLOCK_PERIOD;
-	tb_w_en <= '0';
-	tb_r_en <= '1';
-	wait for CLOCK_PERIOD;
-	tb_funct3 <= b"010";
-	wait for CLOCK_PERIOD;
-	assert(tb_dout = x"F0F0F0F0") report "Testcase 6 sw/lw failed, dout is " & to_hex_string(tb_dout) severity failure;
-	wait;
-end process test;
+
+	while test_suite loop
+		if run("RW") then
+		--RW Testcase
+			tb_r_en <= '0';
+			tb_w_en <= '1';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000001";
+			tb_din <= x"00000001";
+			wait for CLOCK_PERIOD;
+			tb_r_en <= '1';
+			tb_w_en <= '0';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000001";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"00000001");
+		elsif run("simultan RW") then
+		--simultan RW Testcase
+			tb_r_en <= '1';
+			tb_w_en <= '1';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000010";
+			tb_din <= x"00000011";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"00000011");
+		elsif run("async R") then
+		--async R Testcase
+			tb_r_en <= '1';
+			tb_w_en <= '1';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000010";
+			tb_din <= x"00000011";
+			wait for CLOCK_PERIOD;
+			tb_r_en <= '0';
+			tb_w_en <= '1';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000011";
+			tb_din <= x"00000111";
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '1';
+			tb_r_en <= '0';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000110";
+			tb_din <= x"00001111";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"00000011");
+		elsif run("sb, lb, lbu") then
+		--sb, lb, lbu Testcase
+			tb_w_en <= '0';
+			tb_r_en <= '0';
+			tb_funct3 <= b"000";
+			tb_addr <= b"00000010";
+			tb_din <= x"FFFFFFFF";
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '1';
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '0';
+			tb_r_en <= '1';
+			wait for CLOCK_PERIOD;
+			tb_funct3 <= b"100";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"000000FF");
+			wait for CLOCK_PERIOD;
+			tb_funct3 <= b"000";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"FFFFFFFF");
+		elsif run("sh, lh, lhu") then
+		--sh, lh, lhu Testcase
+			tb_w_en <= '0';
+			tb_r_en <= '0';
+			tb_funct3 <= b"001";
+			tb_addr <= b"00000011";
+			tb_din <= x"0000FFF0";
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '1';
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '0';
+			tb_r_en <= '1';
+			wait for CLOCK_PERIOD;
+			tb_funct3 <= b"101";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"0000FFF0");
+			wait for CLOCK_PERIOD;
+			tb_funct3 <= b"000";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"FFFFFFF0");
+		elsif run("sw, lw") then
+		--sw, lw Testcase
+			tb_w_en <= '0';
+			tb_r_en <= '0';
+			tb_funct3 <= b"010";
+			tb_addr <= b"00000111";
+			tb_din <= x"F0F0F0F0";
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '1';
+			wait for CLOCK_PERIOD;
+			tb_w_en <= '0';
+			tb_r_en <= '1';
+			wait for CLOCK_PERIOD;
+			tb_funct3 <= b"010";
+			wait for CLOCK_PERIOD;
+			check_match(tb_dout, x"F0F0F0F0");
+		end if;
+
+	end loop;
+
+	test_runner_cleanup(runner);
+
+end process test_runner;
 
 end architecture behaviour;

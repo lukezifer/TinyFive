@@ -3,7 +3,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
 
+library vunit_lib;
+use vunit_lib.check_pkg.all;
+use vunit_lib.run_pkg.all;
+
 entity tb_rom is
+	generic (runner_cfg : string);
 end tb_rom;
 
 
@@ -44,19 +49,27 @@ begin
 	wait for CLOCK_PERIOD/2;
 end process clock;
 
-test: process
+test_runner: process
 begin
-	--Init, set inputs to zero
-	tb_addr <= x"00";
-	wait for CLOCK_PERIOD;
-	for idx in 0 to 32 loop
-		tb_addr <= std_logic_vector(to_unsigned(idx, tb_addr'length));
+
+	test_runner_setup(runner,runner_cfg);
+	while test_suite loop
+		tb_addr <= x"00";
 		wait for CLOCK_PERIOD;
-		wait on tb_clk;
-		--Do not assert while test program in rom
-		--assert(tb_dout = 16#13#) report "Testcase 1 failed" severity failure;
+
+		if run("Read") then
+			for idx in 0 to 32 loop
+				tb_addr <= std_logic_vector(to_unsigned(idx, tb_addr'length));
+				wait for CLOCK_PERIOD;
+				check_not_unknown(tb_dout);
+				wait for CLOCK_PERIOD;
+			end loop;
+		end if;
+
 	end loop;
-	wait;
-end process test;
+
+	test_runner_cleanup(runner);
+
+end process test_runner;
 
 end architecture behaviour;

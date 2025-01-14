@@ -1,7 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+library vunit_lib;
+use vunit_lib.run_pkg.all;
+
 entity tb_cpu is
+	generic (runner_cfg: string);
 end tb_cpu;
 
 architecture behaviour of tb_cpu is
@@ -39,15 +43,24 @@ begin
 	wait for CLOCK_PERIOD/2;
 end process clock;
 
-run : process
+test_runner : process
 begin
-	--nop
-	tb_test_instr <= x"00000013";
-	tb_rst <= '1';
-	wait for 2 * CLOCK_PERIOD;
-	tb_rst <= '0';
-	wait for CLOCK_PERIOD;
-	wait;
-end process run;
+
+	test_runner_setup(runner, runner_cfg);
+
+	while test_suite loop
+		if run("nop") then
+			--nop
+			tb_test_instr <= x"00000013";
+			tb_rst <= '1';
+			wait for 2 * CLOCK_PERIOD;
+			tb_rst <= '0';
+			wait for CLOCK_PERIOD;
+		end if;
+	end loop;
+
+	test_runner_cleanup(runner);
+
+end process test_runner;
 
 end behaviour;
