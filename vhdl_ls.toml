@@ -1,0 +1,16 @@
+standard = "2008"
+
+[libraries]
+lib.files = [
+	'src/*.vhd',
+	'test/*.vhd'
+]
+
+vunit_lib.files = [
+	'/usr/lib/python3.13/site-packages/vunit/vhdl/run/src/*.vhd',
+	'/usr/lib/python3.13/site-packages/vunit/vhdl/check/src/*.vhd'
+]
+
+[lint]
+unused = 'error'
+unnecessary_work_library = false
