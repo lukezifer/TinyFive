@@ -10,33 +10,35 @@
 --! @details Enumerations for ALU Intructions and ALU Opcodes.
 package cpu_types is
 
---! @brief Enum for ALU Instruction.
---! @details ADD, AND, OR, SLL, SLT, SLTU, SRA, SRL, SUB, XOR and ZERO are supported.
-	type ALU_INSTR_ENUM is
-	(
-		ALU_INSTR_ADD,
-		ALU_INSTR_AND,
-		ALU_INSTR_OR,
-		ALU_INSTR_SLL,
-		ALU_INSTR_SLT,
-		ALU_INSTR_SLTU,
-		ALU_INSTR_SRA,
-		ALU_INSTR_SRL,
-		ALU_INSTR_SUB,
-		ALU_INSTR_XOR,
-		ALU_INSTR_ZERO
-	);
+  --! @brief Enum for ALU Instruction.
+  --! @details ADD, AND, OR, SLL, SLT, SLTU, SRA, SRL, SUB, XOR and ZERO are supported.
 
-	--! @brief Enum for ALU Opcode.
-	--! @details B-Instructions, I-Instructions, R-Instructions, S-Instructions
-	--! and U-Instructions are supported.
-	type ALU_OP_ENUM is 
+  type alu_instr_enum is
 	(
-		ALU_OP_B,
-		ALU_OP_I,
-		ALU_OP_R,
-		ALU_OP_S,
-		ALU_OP_U
-	);
+    alu_instr_add,
+    alu_instr_and,
+    alu_instr_or,
+    alu_instr_sll,
+    alu_instr_slt,
+    alu_instr_sltu,
+    alu_instr_sra,
+    alu_instr_srl,
+    alu_instr_sub,
+    alu_instr_xor,
+    alu_instr_zero
+  );
+
+  --! @brief Enum for ALU Opcode.
+  --! @details B-Instructions, I-Instructions, R-Instructions, S-Instructions
+  --! and U-Instructions are supported.
+
+  type alu_op_enum is
+	(
+    alu_op_b,
+    alu_op_i,
+    alu_op_r,
+    alu_op_s,
+    alu_op_u
+  );
 
 end package cpu_types;
