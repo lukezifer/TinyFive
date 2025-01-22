@@ -1,8 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-package types is
-	type ALU_INSTR_ENUM is 
+package cpu_types is
+	type ALU_INSTR_ENUM is
 	(
 		ALU_INSTR_ADD,
 		ALU_INSTR_AND,

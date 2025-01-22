@@ -2,7 +2,7 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use work.types.all;
+use work.cpu_types.all;
 
 library vunit_lib;
 use vunit_lib.check_pkg.all;

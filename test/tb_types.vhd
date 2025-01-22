@@ -1,5 +1,5 @@
 library ieee;
-use work.types.all;
+use work.cpu_types.all;
 
 entity tb_types is
 end entity;
