@@ -1,24 +1,43 @@
+--------------------------------------------------------------------------------
+--! @file
+--! @brief ALU Control
+--! @author Lukas Meysel
+--! @date 2019-2025
+--! @copyright MIT LICENSE
+--------------------------------------------------------------------------------
+
+--! use ieee library
 library ieee;
+--! use std_logic_1164 for std_logic_vector.
 use ieee.std_logic_1164.all;
+--! use std_logic_unsigned for arithmetic operations with std_logic.
 use ieee.std_logic_unsigned.all;
+--! use numeric_std for unsigned.
 use ieee.numeric_std.all;
+--! use types library
 use work.cpu_types.all;
 
+--! Interface for ALU Control
 entity alu_ctrl is
 port(
-	alu_op	 : in  ALU_OP_ENUM;
-	instr_in : in  std_logic_vector(31 downto 0);
-	alu_instr: out ALU_INSTR_ENUM
+	alu_op		: in  ALU_OP_ENUM; --! Input ALU Operation.
+	instr_in	: in  std_logic_vector(31 downto 0); --! Input Instruction 32 bit.
+	alu_instr	: out ALU_INSTR_ENUM --! Indicates ALU Instruction.
 );
 end entity alu_ctrl;
 
+--! @brief ALU Control Implementation
+--! @details Indicates the ALU Instruction depending on ALU Operation and
+--! Instruction asynchron. R-Type, I-Type, S-Type and U-Type are supported.
 architecture behaviour of alu_ctrl is
-	signal funct3 : std_logic_vector(2 downto 0);
-	signal funct7 : std_logic;
+	signal funct3 : std_logic_vector(2 downto 0); --! Funct3 Slice of Instruction.
+	signal funct7 : std_logic; --! Funct7 Slice of Instruction.
 begin
 	funct3 <= instr_in(14 downto 12);
 	funct7 <= instr_in(30);
 
+	--! Asynchronous ALU Instruction Encoding.
+	--! @vhdlflow
 	control: process(alu_op, funct3, funct7)
 	begin
 		case alu_op is
@@ -100,4 +119,5 @@ begin
 				alu_instr <= ALU_INSTR_ZERO;
 		end case;
 	end process control;
+
 end architecture behaviour;

@@ -1,28 +1,48 @@
+--------------------------------------------------------------------------------
+--! @file
+--! @brief Control Unit
+--! @author Lukas Meysel
+--! @date 2019-2025
+--! @copyright MIT LICENSE
+--------------------------------------------------------------------------------
+
+--! use ieee library
 library ieee;
+--! use std_logic_1164 for std_logic and std_logic_vector.
 use ieee.std_logic_1164.all;
+--! use std_logic_unsigned for arithmetic operations with std_logic.
 use ieee.std_logic_unsigned.all;
+--! use numeric_std for unsigned.
 use ieee.numeric_std.all;
+--! use types library
 use work.cpu_types.all;
 
+--! Interface for Control Unit
 entity ctrl is
 port(
-	opcode	: in	std_logic_vector(6 downto 0);
-	branch	: out	std_logic;
-	imm_in	: out	std_logic;
-	jump	: out	std_logic;
-	mem_read	: out	std_logic;
-	mem_to_reg	: out	std_logic;
-	alu_op	: out	ALU_OP_ENUM;
-	mem_write	: out std_logic;
-	alu_src		: out std_logic;
-	reg_write	: out std_logic;
-	pc_imm		: out std_logic
+	opcode			: in std_logic_vector(6 downto 0); --! 7 bit OpCode Vector.
+	branch			: out std_logic; --! Indicates branch shall be taken.
+	imm_in			: out std_logic; --! Indicates load immediate.
+	jump				: out std_logic; --! Indicates JMP instruction.
+	mem_read		: out std_logic; --! Indicates to read from memory.
+	mem_to_reg	: out std_logic; --! Indicates to load from memory to register.
+	alu_op			: out ALU_OP_ENUM; --! Indicates ALU Operation.
+	mem_write		: out std_logic; --! Indicates to write to memory.
+	alu_src			: out std_logic; --! Indicates ALU src.
+	reg_write		: out std_logic; --! Indicates to write to register.
+	pc_imm			: out std_logic --! Indicates load immediate to PC.
 	);
 end entity ctrl;
 
+--! @brief Control Implementation
+--! @details Setting Control Signals depending on the OpCode asynchron.
+--! R-Instructions, I-Instructions, B-Instructions, S-Instructions,
+--! J-Instructions and U-Instructions are supported.
 architecture behaviour of ctrl is
 begin
 
+	--! Asynchron OpCode Decoding.
+	--! @vhdlflow
 	decode: process(opcode)
 	begin
 		case (opcode) is

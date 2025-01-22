@@ -1,24 +1,46 @@
+--------------------------------------------------------------------------------
+--! @file
+--! @brief Arithmetic Logic Unit
+--! @author Lukas Meysel
+--! @date 2019-2025
+--! @copyright MIT LICENSE
+--------------------------------------------------------------------------------
+
+--! use ieee library
 library ieee;
+--! use std_logic_1164 for std_logic and std_logic_vector.
 use ieee.std_logic_1164.all;
+--! use std_logic_unsigned for arithmetic operations with std_logic.
 use ieee.std_logic_unsigned.all;
+--! use numeric_std for unsigned.
 use ieee.numeric_std.all;
+--! use types library
 use work.cpu_types.all;
 
+--! Arithmetic Logic Unit Interface.
 entity alu is
 port(
-	instr	: in  ALU_INSTR_ENUM;
-	a_in	: in  std_logic_vector(31 downto 0);
-	b_in	: in  std_logic_vector(31 downto 0);
-	c_out	: out std_logic_vector(31 downto 0);
-	z_flag	: out std_logic
+	instr	: in  ALU_INSTR_ENUM; --! ALU instruction.
+	a_in	: in  std_logic_vector(31 downto 0); --! First input value.
+	b_in	: in  std_logic_vector(31 downto 0); --! Second Input value.
+	c_out	: out std_logic_vector(31 downto 0); --! Output value.
+	z_flag	: out std_logic --! Zero Flag Output.
 );
 end entity alu;
 
+--! @brief Arithmetic Logic Unit Implementation.
+--! @details The ALU performs arithmetic and logical operations on two inputs
+--! and outputs the computate value as well as a signal that indicates if the
+--! output is '0'. Supported are all ALU instructions that are defined with 
+--! @a ALU_INSTR_ENUM from cpu_types.
+--! @see types.vhd.
 architecture behaviour of alu is
 begin
+	--! Asynchronous ALU operation.
+	--! @vhdlflow 
 	calculate: process(instr, a_in, b_in)
-	variable output : std_logic_vector(31 downto 0) := x"00000000";
-	variable zero : std_logic := '0';
+	variable output : std_logic_vector(31 downto 0) := x"00000000"; --! Internal value of output.
+	variable zero : std_logic := '0'; --! Internal state of zero flag.
 	begin
 		case instr is
 			--ADD
@@ -72,7 +94,7 @@ begin
 
 	c_out <= output;
 	z_flag <= zero;
-	end process calculate;
 
+	end process calculate;
 
 end architecture behaviour;
