@@ -36,7 +36,7 @@ end entity ram;
 --! @brief Random Access Memory Implementation.
 --! @details Storing data is synchronized with Clock, Store Byte, Store
 --! Halfword and Store Word are supported.
---! Reading data is asynchron, Load Byte, Load Halfword, Load Word, Load Byte
+--! Reading data is asynchronous, Load Byte, Load Halfword, Load Word, Load Byte
 --! Unsigned and Load Halfword Unsigned are supported.
 
 architecture behaviour of ram is
@@ -88,9 +88,9 @@ begin
 
   end process data_store;
 
-  --! Asynchron Read.
+  --! Asynchronous Read.
   --! @vhdlflow
-  data_read : process (ram_set, r_en, funct3) is
+  data_read : process (addr, ram_set, r_en, funct3) is
 
     variable ram_out : std_logic_vector(31 downto 0);
 
@@ -132,6 +132,8 @@ begin
 
       end case;
 
+    else
+      dout <= x"00000000";
     end if;
 
   end process data_read;

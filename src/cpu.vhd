@@ -304,7 +304,7 @@ begin
 
   --! Asynchronous Register Write Source.
   --! @vhdlflow
-  reg_write_src : process (ctrl_mem_to_reg, ctrl_jump, ram_out, alu_out, pc_out) is
+  reg_write_src : process (ctrl_jump, pc_out, ctrl_imm_in, imm_gen_output, ctrl_mem_to_reg, ram_out, alu_out) is
   begin
 
     if (ctrl_jump = '1') then
@@ -338,7 +338,7 @@ begin
 
   --! Asynchronous Immediate Generator Source.
   --! @vhdlflow
-  imm_gen_src : process (ctrl_pc_imm) is
+  imm_gen_src : process (ctrl_pc_imm, pc_out, rom_instr) is
   begin
 
     if (ctrl_pc_imm = '1') then
