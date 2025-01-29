@@ -123,7 +123,7 @@ begin
         tb_addr   <= b"00000110";
         tb_din    <= x"00001111";
         wait for clock_period;
-        check_match(tb_dout, x"00000011");
+        check_match(tb_dout, x"00000000");
       elsif run("sb, lb, lbu") then
         -- sb, lb, lbu Testcase
         tb_w_en   <= '0';
@@ -180,6 +180,56 @@ begin
         tb_funct3 <= b"010";
         wait for clock_period;
         check_match(tb_dout, x"F0F0F0F0");
+      elsif run("little endian 1") then
+        tb_w_en   <= '0';
+        tb_r_en   <= '0';
+        tb_funct3 <= b"011";
+        tb_addr   <= b"00010000";
+        tb_din    <= x"FFFFFFFF";
+        wait for clock_period;
+        tb_w_en   <= '1';
+        wait for clock_period;
+        tb_w_en   <= '0';
+        tb_din    <= x"00000011";
+        tb_addr   <= b"00010001";
+        tb_funct3 <= b"000";
+        wait for clock_period;
+        tb_w_en   <= '1';
+        wait for clock_period;
+        tb_w_en   <= '0';
+        tb_addr   <= b"00010000";
+        tb_funct3 <= b"010";
+        wait for clock_period;
+        tb_r_en   <= '1';
+        wait for clock_period;
+        check_match(tb_dout, x"FFFF11FF");
+        tb_din    <= x"00000000";
+        tb_w_en   <= '1';
+        wait for clock_period;
+        tb_w_en   <= '0';
+      elsif run("little endian 2") then
+        tb_w_en   <= '0';
+        tb_r_en   <= '0';
+        tb_funct3 <= b"000";
+        tb_addr   <= b"00001000";
+        tb_din    <= x"00000011";
+        tb_w_en   <= '1';
+        wait for clock_period;
+        tb_din    <= x"00000022";
+        tb_addr   <= b"00001001";
+        wait for clock_period;
+        tb_din    <= x"00000033";
+        tb_addr   <= b"00001010";
+        wait for clock_period;
+        tb_din    <= x"00000044";
+        tb_addr   <= b"00001011";
+        wait for clock_period;
+        tb_w_en   <= '0';
+        tb_funct3 <= b"010";
+        tb_addr   <= b"00001000";
+        tb_r_en   <= '1';
+        wait for clock_period;
+        check_match(tb_dout, x"44332211");
       end if;
 
     end loop;

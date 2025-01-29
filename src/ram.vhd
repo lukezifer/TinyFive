@@ -38,57 +38,60 @@ end entity ram;
 --! Halfword and Store Word are supported.
 --! Reading data is asynchronous, Load Byte, Load Halfword, Load Word, Load Byte
 --! Unsigned and Load Halfword Unsigned are supported.
+--! The Memory Access in RISC V is Byte Addressing with little endianness
+--! Little endianness means that the least significant byte is stored at the
+--! lowest address.
 
 architecture behaviour of ram is
 
-  type ram_t is array(0 to size - 1) of std_logic_vector(31 downto 0); --! Internal array type for registers.
+  type ram_t is array(0 to size - 1) of std_logic_vector(7 downto 0); --! Internal array type for random access memory.
 
-  signal ram_set : ram_t; --! Internal array of registers.
+  signal ram_set : ram_t; --! Internal array of random access memory data.
 
 begin
 
   --! Synchron Store.
+
+	--! | Instruction    | funct3 |
+	--! | -------------- | ------ |
+	--! | store byte     | b000   |
+	--! | store halfword | b001   |
+	--! | store word     | b010   |
+
   --! @vhdlflow
   data_store : process (clk) is
-
-    variable ram_in : std_logic_vector(31 downto 0);
-
   begin
 
     if (rising_edge(clk)) then
       -- store
       if (w_en = '1') then
+        if (funct3(2) = '0') then
+          ram_set(to_integer(unsigned(addr))) <= din(7 downto 0);
 
-        case funct3 is
+          if (funct3(0) = '1' or funct3(1) = '1') then
+            ram_set(to_integer(unsigned(addr) + 1)) <= din(15 downto 8);
 
-          -- store byte
-          when b"000" =>
-
-            ram_in := std_logic_vector(resize(unsigned(din(7 downto 0)), ram_in'length));
-
-          -- store halfword
-          when b"001" =>
-
-            ram_in := std_logic_vector(resize(unsigned(din(15 downto 0)), ram_in'length));
-
-          -- store word
-          when b"010" =>
-
-            ram_in := din;
-
-          when others =>
-
-            ram_in := x"00000000";
-
-        end case;
-
-        ram_set(to_integer(unsigned(addr))) <= ram_in;
+            if (funct3(1) = '1') then
+              ram_set(to_integer(unsigned(addr) + 2)) <= din(23 downto 16);
+              ram_set(to_integer(unsigned(addr) + 3)) <= din(31 downto 24);
+            end if;
+          end if;
+        end if;
       end if;
     end if;
 
   end process data_store;
 
   --! Asynchronous Read.
+
+  --! | Instruction            | funct3 |
+  --! | ---------------------- | ------ |
+  --! | load byte              | b000   |
+  --! | load byte unsigned     | b100   |
+  --! | load halfword          | b001   |
+  --! | load halfword unsigned | b101   |
+  --! | load word              | b010   |
+
   --! @vhdlflow
   data_read : process (addr, ram_set, r_en, funct3) is
 
@@ -97,43 +100,35 @@ begin
   begin
 
     if (r_en = '1') then
-      ram_out := ram_set(to_integer(unsigned(addr)));
-
-      case funct3 is
-
-        -- lb
-        when b"000" =>
-
+      ram_out(7 downto 0) := ram_set(to_integer(unsigned(addr)));
+      if (funct3(1 downto 0) = "00") then
+        if (funct3(2) = '0') then
+          -- lb
           dout <= std_logic_vector(resize(signed(ram_out(7 downto 0)), dout'length));
-
-        -- lh
-        when b"001" =>
-
-          dout <= std_logic_vector(resize(signed(ram_out(15 downto 0)), dout'length));
-
-        -- lbu
-        when b"100" =>
-
+        else
+          -- lbu
           dout <= std_logic_vector(resize(unsigned(ram_out(7 downto 0)), dout'length));
-
-        -- lhu
-        when b"101" =>
-
-          dout <= std_logic_vector(resize(unsigned(ram_out(15 downto 0)), dout'length));
-
-        -- lw
-        when b"010" =>
-
+        end if;
+      else
+        ram_out(15 downto 8) := ram_set(to_integer(unsigned(addr) + 1));
+        if (funct3(1 downto 0) = "01") then
+          if (funct3(2) = '0') then
+            -- lh
+            dout <= std_logic_vector(resize(signed(ram_out(15 downto 0)), dout'length));
+          else
+            -- lhu
+            dout <= std_logic_vector(resize(unsigned(ram_out(15 downto 0)), dout'length));
+          end if;
+        end if;
+        if (funct3 = "010") then
+          -- lw
+          ram_out(23 downto 16) := ram_set(to_integer(unsigned(addr) + 2));
+          ram_out(31 downto 24) := ram_set(to_integer(unsigned(addr) + 3));
           dout <= ram_out;
-
-        when others =>
-
-          dout <= x"00000000";
-
-      end case;
-
+        end if;
+      end if;
     else
-      dout <= x"00000000";
+      dout <= (others => '0');
     end if;
 
   end process data_read;
